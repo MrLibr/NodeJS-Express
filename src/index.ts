@@ -1,9 +1,13 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import expressHandlebars from 'express-handlebars';
 import os from 'os';
 import { NamingConstants } from './constants/naming.constants';
 import { PathConstants } from './constants/path.constants';
 import { RouterConstants } from './constants/router.constants';
+import aboutRouters from './routers/about';
+import addCourseRouters from './routers/add';
+import allCoursesRouters from './routers/courses';
+import homeRouters from './routers/home';
 
 
 const app = express();
@@ -18,13 +22,10 @@ app.set( PathConstants.VIEWS_FOLDER_STANDART, PathConstants.VIEWS_FOLDER_CUSTOM 
 
 app.use( express.static( PathConstants.PUBLIC_FOLDER ) );
 
-app.get( RouterConstants.ROOT, ( req: Request, res: Response ) => {
-  res.render( PathConstants.HOME_PAGE );
-} );
-
-app.get( RouterConstants.ABOUT, ( req: Request, res: Response ) => {
-  res.render( PathConstants.ABOUT_PAGE );
-} );
+app.use( RouterConstants.ROOT, homeRouters );
+app.use( RouterConstants.ALL_COURSES, allCoursesRouters );
+app.use( RouterConstants.ADD_COURSE, addCourseRouters );
+app.use( RouterConstants.ABOUT, aboutRouters );
 
 const PORT: string | number = process.env.PORT || 3000;
 
