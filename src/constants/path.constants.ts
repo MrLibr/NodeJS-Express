@@ -3,4 +3,5 @@ export enum PathConstants {
   ABOUT_PAGE = 'about-page',
   VIEWS_FOLDER_STANDART = 'views',
   VIEWS_FOLDER_CUSTOM = 'src/views',
+  PUBLIC_FOLDER = 'public'
 }

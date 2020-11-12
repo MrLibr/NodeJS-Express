@@ -16,6 +16,8 @@ app.engine( NamingConstants.HANDLEBARS, handlebars.engine );
 app.set( NamingConstants.VIEW_ENGINE, NamingConstants.HANDLEBARS );
 app.set( PathConstants.VIEWS_FOLDER_STANDART, PathConstants.VIEWS_FOLDER_CUSTOM );
 
+app.use( express.static( PathConstants.PUBLIC_FOLDER ) );
+
 app.get( RouterConstants.ROOT, ( req: Request, res: Response ) => {
   res.render( PathConstants.HOME_PAGE );
 } );
