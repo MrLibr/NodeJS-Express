@@ -14,8 +14,8 @@ router.get( RouterConstants.ROOT, ( req: Request, res: Response ) => {
 } );
 
 router.post( RouterConstants.ROOT, async ( req: Request, res: Response ) => {
-  const { title, price, img } = req.body;
-  const course = new Course( title, price, img );
+  const { title, price, description, img } = req.body;
+  const course = new Course( title, price, description, img );
   await course.save();
 
   res.redirect( RouterConstants.ALL_COURSES );

@@ -7,6 +7,7 @@ export interface ICourse {
   id: string;
   title: string;
   price: number;
+  description: string;
   img: string;
 }
 
@@ -14,11 +15,13 @@ export default class Course {
   private id: string;
   private title: string;
   private price: number;
+  private description: string;
   private img: string;
 
-  constructor ( title: string, price: number, img: string ) {
+  constructor ( title: string, price: number, description: string, img: string ) {
     this.title = title;
     this.price = price;
+    this.description = description;
     this.img = img;
     this.id = uuidv4();
   }
@@ -42,6 +45,7 @@ export default class Course {
       id: this.id,
       title: this.title,
       price: this.price,
+      description: this.description,
       img: this.img
     };
   }
