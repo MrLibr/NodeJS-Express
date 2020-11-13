@@ -3,4 +3,5 @@ export enum ParamsConstants {
   ABOUT_PAGE = 'About Page',
   ALL_COURSES_PAGE = 'Courses Page',
   ADD_COURSE_PAGE = 'Add Course Page',
+  COURSE_HEADER = 'Li:br | '
 }

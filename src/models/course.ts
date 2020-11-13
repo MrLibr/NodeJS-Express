@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { PathConstants } from './../constants/path.constants';
+import { ICourse } from './course';
 
 export interface ICourse {
   id: string;
@@ -38,6 +39,11 @@ export default class Course {
         ), 'UTF-8',
         ( error, data ) => error ? reject( error ) : resolve( JSON.parse( data ) ) );
     } );
+  }
+
+  static async getById( id: string ): Promise<ICourse | undefined> {
+    const courses: ICourse[] = await Course.getAll();
+    return courses.find( course => course.id === id );
   }
 
   getObject(): ICourse {
