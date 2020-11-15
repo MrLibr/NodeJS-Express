@@ -30,13 +30,8 @@ export default class Course {
   static getAll(): Promise<ICourse[]> {
     return new Promise( ( resolve, reject ) => {
       fs.readFile(
-        path.join(
-          __dirname,
-          PathConstants.UP_FOLDER,
-          PathConstants.UP_FOLDER,
-          PathConstants.DATA_FOLDER,
-          PathConstants.COURSES_JSON
-        ), 'UTF-8',
+        Course.getPath(),
+        'UTF-8',
         ( error, data ) => error ? reject( error ) : resolve( JSON.parse( data ) ) );
     } );
   }
@@ -72,15 +67,19 @@ export default class Course {
   private static rewrite( courses: ICourse[] ): Promise<void> {
     return new Promise( ( resolve, reject ) => {
       fs.writeFile(
-        path.join(
-          __dirname,
-          PathConstants.UP_FOLDER,
-          PathConstants.UP_FOLDER,
-          PathConstants.DATA_FOLDER,
-          PathConstants.COURSES_JSON
-        ),
+        Course.getPath(),
         JSON.stringify( courses ),
         error => error ? reject( error ) : resolve() );
     } );
+  }
+
+  private static getPath(): string {
+    return path.join(
+      __dirname,
+      PathConstants.UP_FOLDER,
+      PathConstants.UP_FOLDER,
+      PathConstants.DATA_FOLDER,
+      PathConstants.COURSES_JSON
+    );
   }
 }

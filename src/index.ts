@@ -6,6 +6,7 @@ import { PathConstants } from './constants/path.constants';
 import { RouterConstants } from './constants/router.constants';
 import aboutRouters from './routers/about';
 import addCourseRouters from './routers/add';
+import cardRouters from './routers/card';
 import allCoursesRouters from './routers/courses';
 import homeRouters from './routers/home';
 
@@ -25,8 +26,9 @@ app.use( express.urlencoded( { extended: true } ) );
 
 app.use( RouterConstants.ROOT, homeRouters );
 app.use( RouterConstants.ALL_COURSES, allCoursesRouters );
-app.use( RouterConstants.ADD_COURSE, addCourseRouters );
+app.use( RouterConstants.ADD, addCourseRouters );
 app.use( RouterConstants.ABOUT, aboutRouters );
+app.use( RouterConstants.CARD, cardRouters );
 
 const PORT: string | number = process.env.PORT || 3000;
 
