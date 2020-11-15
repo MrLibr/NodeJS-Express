@@ -1,0 +1,86 @@
+<h1>Edit Current Course | {{course.title}}:</h1>
+
+<form
+  action="/courses/edit"
+  method="POST"
+>
+  <div class="input-field">
+    <input
+      placeholder="Write Correct Title Course"
+      id="title"
+      name="title"
+      type="text"
+      value="{{course.title}}"
+      class="validate"
+      required
+    >
+    <label for="title">Title</label>
+    <span
+      class="helper-text"
+      data-error="Write Title"
+    ></span>
+  </div>
+
+  <div class="input-field">
+    <input
+      placeholder="Write Current Price"
+      id="price"
+      name="price"
+      type="number"
+      value="{{course.price}}"
+      class="validate"
+      min="0"
+      required
+    >
+    <label for="price">Price</label>
+    <span
+      class="helper-text"
+      data-error="Write Price On The Course"
+    ></span>
+  </div>
+
+  <div class="input-field">
+    <input
+      placeholder="Write Description About This Course"
+      id="description"
+      name="description"
+      type="text"
+      value="{{course.description}}"
+      class="validate"
+      required
+    >
+    <label for="price">Description</label>
+    <span
+      class="helper-text"
+      data-error="Write Description On The Course"
+    ></span>
+  </div>
+
+  <div class="input-field">
+    <input
+      placeholder="Write Image URL"
+      id="img"
+      name="img"
+      type="url"
+      value="{{course.img}}"
+      class="validate"
+      required
+    >
+    <label for="img">URL Image</label>
+    <span
+      class="helper-text"
+      data-error="Write URL Link"
+    ></span>
+  </div>
+
+  <input
+    name="id"
+    type="hidden"
+    value="{{course.id}}"
+  >
+
+  <button
+    class="btn btn-primary"
+    type="submit"
+  >Edit Course</button>
+</form>

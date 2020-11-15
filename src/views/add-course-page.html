@@ -1,0 +1,76 @@
+<h1>Add New Course:</h1>
+
+<form
+  action="/add"
+  method="POST"
+>
+  <div class="input-field">
+    <input
+      placeholder="Write Correct Title Course"
+      id="title"
+      name="title"
+      type="text"
+      class="validate"
+      required
+    >
+    <label for="title">Title</label>
+    <span
+      class="helper-text"
+      data-error="Write Title"
+    ></span>
+  </div>
+
+  <div class="input-field">
+    <input
+      placeholder="Write Current Price"
+      id="price"
+      name="price"
+      type="number"
+      class="validate"
+      min="0"
+      required
+    >
+    <label for="price">Price</label>
+    <span
+      class="helper-text"
+      data-error="Write Price On The Course"
+    ></span>
+  </div>
+
+  <div class="input-field">
+    <input
+      placeholder="Write Description About This Course"
+      id="description"
+      name="description"
+      type="text"
+      class="validate"
+      required
+    >
+    <label for="price">Description</label>
+    <span
+      class="helper-text"
+      data-error="Write Description On The Course"
+    ></span>
+  </div>
+
+  <div class="input-field">
+    <input
+      placeholder="Write Image URL"
+      id="img"
+      name="img"
+      type="url"
+      class="validate"
+      required
+    >
+    <label for="img">URL Image</label>
+    <span
+      class="helper-text"
+      data-error="Write URL Link"
+    ></span>
+  </div>
+
+  <button
+    class="btn btn-primary"
+    type="submit"
+  >Add Course</button>
+</form>

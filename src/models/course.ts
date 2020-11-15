@@ -46,6 +46,13 @@ export default class Course {
     return courses.find( course => course.id === id );
   }
 
+  static async update( course: ICourse ): Promise<void> {
+    const courses: ICourse[] = await Course.getAll();
+    const currentIndex: number = courses.findIndex( currentCourse => currentCourse.id === course.id );
+    courses[ currentIndex ] = course;
+    Course.rewrite( courses );
+  }
+
   getObject(): ICourse {
     return {
       id: this.id,
@@ -59,7 +66,10 @@ export default class Course {
   async save(): Promise<void> {
     const courses: ICourse[] = await Course.getAll();
     courses.push( this.getObject() );
+    Course.rewrite( courses );
+  }
 
+  private static rewrite( courses: ICourse[] ): Promise<void> {
     return new Promise( ( resolve, reject ) => {
       fs.writeFile(
         path.join(

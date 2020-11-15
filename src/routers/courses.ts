@@ -26,4 +26,23 @@ router.get( RouterConstants.BY_ID, async ( req: Request, res: Response ) => {
   } );
 } );
 
+router.get( RouterConstants.EDIT_BY_ID, async ( req: Request, res: Response ) => {
+  const { allow } = req.query;
+
+  if ( !allow ) {
+    return res.redirect( RouterConstants.ROOT );
+  } else {
+    const course: ICourse | undefined = await Course.getById( req.params.id );
+    res.render( PathConstants.EDIT_COURSE_PAGE, {
+      title: ParamsConstants.EDIT_COURSE_HEADER + course?.title,
+      course
+    } );
+  }
+} );
+
+router.post( RouterConstants.EDIT, async ( req: Request, res: Response ) => {
+  await Course.update( req.body );
+  res.redirect( RouterConstants.ALL_COURSES );
+} );
+
 export default router;

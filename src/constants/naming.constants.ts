@@ -1,5 +1,5 @@
 export enum NamingConstants {
-  HANDLEBARS = 'hbs',
+  HANDLEBARS = 'html',
   VIEW_ENGINE = 'view engine',
   MAIN_LAYOUT = 'main',
   ADDITIONAL_LAYOUT = 'additional'
