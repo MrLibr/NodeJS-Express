@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import { HTTPStatuses } from './../constants/http-statuses.constants';
 import { ParamsConstants } from './../constants/params.constants';
 import { PathConstants } from './../constants/path.constants';
 import { RouterConstants } from './../constants/router.constants';
@@ -12,7 +13,8 @@ router.get( RouterConstants.ROOT, async ( req: Request, res: Response ) => {
   res.render( PathConstants.CARD_PAGE, {
     title: ParamsConstants.CARD_HEADER,
     isCard: true,
-    card
+    courses: card.courses,
+    totalPrice: card.price
   } );
 } );
 
@@ -21,4 +23,10 @@ router.post( RouterConstants.ADD, async ( req: Request, res: Response ) => {
   await Card.add( course );
   res.redirect( RouterConstants.CARD );
 } );
+
+router.delete( RouterConstants.REMOVE + RouterConstants.BY_ID, async ( req: Request, res: Response ) => {
+  const card: ICard = await Card.remove( req.params.id );
+  res.status( HTTPStatuses.SUCCESS ).json( card );
+} );
+
 export default router;

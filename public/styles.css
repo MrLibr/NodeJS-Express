@@ -49,3 +49,8 @@
 .course .price.big {
   font-size: 2.5rem;
 }
+
+.fixed-width {
+  width: 100%;
+  text-align: center;
+}
