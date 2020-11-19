@@ -1,5 +1,6 @@
 import express from 'express';
 import expressHandlebars from 'express-handlebars';
+import mongoose from 'mongoose';
 import os from 'os';
 import { NamingConstants } from './constants/naming.constants';
 import { PathConstants } from './constants/path.constants';
@@ -30,8 +31,23 @@ app.use( RouterConstants.ADD, addCourseRouters );
 app.use( RouterConstants.ABOUT, aboutRouters );
 app.use( RouterConstants.CARD, cardRouters );
 
-const PORT: string | number = process.env.PORT || 3000;
+serverStart();
 
-app.listen( PORT, () => {
-  console.log( `Server Is Running with OS: ${ os.platform() } ${ os.arch() }... You Can Watch This http://localhost:${ PORT }` );
-} );
+async function serverStart() {
+  try {
+    const PORT: string | number = process.env.PORT || 3000;
+    const url: string = `mongodb+srv://Libr:26ZzcP4IBlap5p0L@courseshop.1blve.mongodb.net/coursesShop`;
+
+    await mongoose.connect( url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false
+    } );
+
+    app.listen( PORT, () => {
+      console.log( `Server Is Running with OS: ${ os.platform() } ${ os.arch() }... You Can Watch This http://localhost:${ PORT }` );
+    } );
+  } catch ( error ) {
+    console.log( error );
+  }
+}

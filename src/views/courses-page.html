@@ -18,8 +18,8 @@
     <span class="price">{{price}}</span>
     <div class="position-space-between">
       <div class="card-action position-start">
-        <p><a href="/courses/{{id}}">Open Course</a></p>
-        <p><a href="/courses/{{id}}/edit?allow=false">Edit Course</a></p>
+        <p><a href="/courses/{{_id}}">Open Course</a></p>
+        <p><a href="/courses/{{_id}}/edit?allow=false">Edit Course</a></p>
       </div>
       <form
         action="/card/add"
@@ -27,8 +27,8 @@
       >
         <input
           type="hidden"
-          name="id"
-          value="{{id}}"
+          name="_id"
+          value="{{_id}}"
         >
         <button class="btn btn-primary">Add To Card</button>
       </form>

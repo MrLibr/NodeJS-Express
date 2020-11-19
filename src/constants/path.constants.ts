@@ -11,6 +11,5 @@ export enum PathConstants {
   PUBLIC_FOLDER = 'public',
   UP_FOLDER = '..',
   DATA_FOLDER = 'data',
-  COURSES_JSON = 'courses.json',
   CARD_JSON = 'card.json'
 }

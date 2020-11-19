@@ -15,10 +15,14 @@ router.get( RouterConstants.ROOT, ( req: Request, res: Response ) => {
 
 router.post( RouterConstants.ROOT, async ( req: Request, res: Response ) => {
   const { title, price, description, img } = req.body;
-  const course = new Course( title, price, description, img );
-  await course.save();
+  const course = new Course( { title, price, description, img } );
 
-  res.redirect( RouterConstants.ALL_COURSES );
+  try {
+    await course.save();
+    res.redirect( RouterConstants.ALL_COURSES );
+  } catch ( error ) {
+    console.log( error );
+  }
 } );
 
 export default router;
