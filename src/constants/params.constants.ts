@@ -5,5 +5,8 @@ export enum ParamsConstants {
   ADD_COURSE_PAGE = 'Add Course Page',
   COURSE_HEADER = 'Li:br | ',
   EDIT_COURSE_HEADER = 'Edit | ',
-  CARD_HEADER = "Your Card"
+  CARD_HEADER = 'Your Card',
+  USER_ID = 'userId',
+  EMAIL = 'email',
+  NAME = 'name'
 }

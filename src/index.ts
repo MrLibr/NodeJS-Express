@@ -1,10 +1,11 @@
-import express from 'express';
+import express, { NextFunction } from 'express';
 import expressHandlebars from 'express-handlebars';
 import mongoose from 'mongoose';
 import os from 'os';
 import { NamingConstants } from './constants/naming.constants';
 import { PathConstants } from './constants/path.constants';
 import { RouterConstants } from './constants/router.constants';
+import User from './models/user';
 import aboutRouters from './routers/about';
 import addCourseRouters from './routers/add';
 import cardRouters from './routers/card';
@@ -24,6 +25,15 @@ app.set( PathConstants.VIEWS_FOLDER_STANDART, PathConstants.VIEWS_FOLDER_CUSTOM 
 
 app.use( express.static( PathConstants.PUBLIC_FOLDER ) );
 app.use( express.urlencoded( { extended: true } ) );
+app.use( async ( req: Request, res: Response, next: NextFunction ) => {
+  try {
+    const currentUser = await User.findById( '5fb7d139ad5c1462c95ad0a3' );
+    req.user = currentUser;
+    next();
+  } catch ( error ) {
+    console.log( error );
+  }
+} );
 
 app.use( RouterConstants.ROOT, homeRouters );
 app.use( RouterConstants.ALL_COURSES, allCoursesRouters );
@@ -43,6 +53,18 @@ async function serverStart() {
       useUnifiedTopology: true,
       useFindAndModify: false
     } );
+
+    const condidate = await User.findOne().lean();
+
+    if ( !condidate ) {
+      const newUser = new User( {
+        email: 'max@gmail.com',
+        name: 'Maxim',
+        card: { items: [] }
+      } );
+
+      await newUser.save();
+    }
 
     app.listen( PORT, () => {
       console.log( `Server Is Running with OS: ${ os.platform() } ${ os.arch() }... You Can Watch This http://localhost:${ PORT }` );

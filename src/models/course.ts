@@ -3,6 +3,7 @@ import { ModelsConstants } from './../constants/models.constants';
 
 export interface ICourse {
   id?: string;
+  userId: string;
   title: string;
   price: number;
   description: string;
@@ -10,6 +11,10 @@ export interface ICourse {
 }
 
 export const courseSchema: Schema<ICourse> = new Schema<ICourse>( {
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: ModelsConstants.USER
+  },
   title: {
     type: String,
     required: true

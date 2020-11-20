@@ -77,7 +77,7 @@
   <input
     name="id"
     type="hidden"
-    value="{{course.id}}"
+    value="{{course._id}}"
   >
 
   <button
@@ -89,12 +89,11 @@
 <form
   action="/courses/remove"
   method="post"
-  class="m20"
 >
   <input
     name="id"
     type="hidden"
-    value="{{course.id}}"
+    value="{{course._id}}"
   >
 
   <button

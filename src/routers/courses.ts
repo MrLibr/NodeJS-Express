@@ -1,15 +1,17 @@
 import express, { Request, Response } from 'express';
-import { ParamsConstants } from '../constants/params.constants';
 import { PathConstants } from '../constants/path.constants';
 import { RouterConstants } from '../constants/router.constants';
 import { NamingConstants } from './../constants/naming.constants';
+import { ParamsConstants } from './../constants/params.constants';
 import Course from './../models/course';
 
 const router = express.Router();
 
 router.get( RouterConstants.ROOT, async ( req: Request, res: Response ) => {
   try {
-    const courses = await Course.find().lean();
+    const courses = await Course.find()
+      .populate( ParamsConstants.USER_ID, `${ ParamsConstants.EMAIL } ${ ParamsConstants.NAME }` )
+      .lean();
 
     res.render( PathConstants.ALL_COURSES, {
       title: ParamsConstants.ALL_COURSES_PAGE,
@@ -56,8 +58,9 @@ router.get( RouterConstants.EDIT_BY_ID, async ( req: Request, res: Response ) =>
 } );
 
 router.post( RouterConstants.EDIT, async ( req: Request, res: Response ) => {
+  console.log( req.body.id );
   try {
-    await Course.findOneAndUpdate( req.body.id, req.body );
+    await Course.findByIdAndUpdate( req.body.id, req.body );
     res.redirect( RouterConstants.ALL_COURSES );
   } catch ( error ) {
     console.log( error );
@@ -66,7 +69,7 @@ router.post( RouterConstants.EDIT, async ( req: Request, res: Response ) => {
 
 router.post( RouterConstants.REMOVE, async ( req: Request, res: Response ) => {
   try {
-    await Course.findOneAndDelete( req.body.id );
+    await Course.findByIdAndDelete( req.body.id );
     res.redirect( RouterConstants.ALL_COURSES );
   } catch ( error ) {
     console.log( error );

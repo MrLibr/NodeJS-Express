@@ -15,7 +15,7 @@ router.get( RouterConstants.ROOT, ( req: Request, res: Response ) => {
 
 router.post( RouterConstants.ROOT, async ( req: Request, res: Response ) => {
   const { title, price, description, img } = req.body;
-  const course = new Course( { title, price, description, img } );
+  const course = new Course( { title, price, description, img, userId: req.user } );
 
   try {
     await course.save();
