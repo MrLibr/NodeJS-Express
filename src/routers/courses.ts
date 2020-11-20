@@ -8,23 +8,31 @@ import Course from './../models/course';
 const router = express.Router();
 
 router.get( RouterConstants.ROOT, async ( req: Request, res: Response ) => {
-  const courses = await Course.find().lean();
+  try {
+    const courses = await Course.find().lean();
 
-  res.render( PathConstants.ALL_COURSES, {
-    title: ParamsConstants.ALL_COURSES_PAGE,
-    isAllCourses: true,
-    courses
-  } );
+    res.render( PathConstants.ALL_COURSES, {
+      title: ParamsConstants.ALL_COURSES_PAGE,
+      isAllCourses: true,
+      courses
+    } );
+  } catch ( error ) {
+    console.log( error );
+  }
 } );
 
 router.get( RouterConstants.BY_ID, async ( req: Request, res: Response ) => {
-  const course = await Course.findById( req.params.id ).lean();
+  try {
+    const course = await Course.findById( req.params.id ).lean();
 
-  res.render( PathConstants.CURRENT_COURSE_PAGE, {
-    layout: NamingConstants.ADDITIONAL_LAYOUT,
-    title: ParamsConstants.COURSE_HEADER + course?.title,
-    course
-  } );
+    res.render( PathConstants.CURRENT_COURSE_PAGE, {
+      layout: NamingConstants.ADDITIONAL_LAYOUT,
+      title: ParamsConstants.COURSE_HEADER + course?.title,
+      course
+    } );
+  } catch ( error ) {
+    console.log( error );
+  }
 } );
 
 router.get( RouterConstants.EDIT_BY_ID, async ( req: Request, res: Response ) => {
@@ -33,18 +41,36 @@ router.get( RouterConstants.EDIT_BY_ID, async ( req: Request, res: Response ) =>
   if ( !allow ) {
     return res.redirect( RouterConstants.ROOT );
   } else {
-    const course = await Course.findById( req.params.id ).lean();
 
-    res.render( PathConstants.EDIT_COURSE_PAGE, {
-      title: ParamsConstants.EDIT_COURSE_HEADER + course?.title,
-      course
-    } );
+    try {
+      const course = await Course.findById( req.params.id ).lean();
+
+      res.render( PathConstants.EDIT_COURSE_PAGE, {
+        title: ParamsConstants.EDIT_COURSE_HEADER + course?.title,
+        course
+      } );
+    } catch ( error ) {
+      console.log( error );
+    }
   }
 } );
 
 router.post( RouterConstants.EDIT, async ( req: Request, res: Response ) => {
-  await Course.findOneAndUpdate( req.body._id, req.body );
-  res.redirect( RouterConstants.ALL_COURSES );
+  try {
+    await Course.findOneAndUpdate( req.body.id, req.body );
+    res.redirect( RouterConstants.ALL_COURSES );
+  } catch ( error ) {
+    console.log( error );
+  }
+} );
+
+router.post( RouterConstants.REMOVE, async ( req: Request, res: Response ) => {
+  try {
+    await Course.findOneAndDelete( req.body.id );
+    res.redirect( RouterConstants.ALL_COURSES );
+  } catch ( error ) {
+    console.log( error );
+  }
 } );
 
 export default router;
