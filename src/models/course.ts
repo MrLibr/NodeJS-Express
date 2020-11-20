@@ -1,4 +1,5 @@
 import { model, Schema } from 'mongoose';
+import { ModelsConstants } from './../constants/models.constants';
 
 export interface ICourse {
   id?: string;
@@ -29,4 +30,4 @@ export const courseSchema: Schema<ICourse> = new Schema<ICourse>( {
   }
 } );
 
-export default model( 'Course', courseSchema );
+export default model( ModelsConstants.COURSE, courseSchema );
