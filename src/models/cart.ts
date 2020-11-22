@@ -1,15 +1,15 @@
 import { model, Schema } from 'mongoose';
-import { ModelsConstants } from './../constants/models.constants';
-export interface ICardCourse {
+import { ModelsConstants } from '../constants/models.constants';
+export interface ICartCourse {
   count: number;
   courseId: string;
 }
 
-export interface ICard {
-  items: ICardCourse[];
+export interface ICart {
+  items: ICartCourse[];
 }
 
-export const cardSchema: Schema<ICard> = new Schema( {
+export const cartSchema: Schema<ICart> = new Schema( {
   items: [ {
     count: {
       type: Number,
@@ -24,4 +24,4 @@ export const cardSchema: Schema<ICard> = new Schema( {
   } ]
 } );
 
-export default model( ModelsConstants.CARD, cardSchema );
+export default model( ModelsConstants.CART, cartSchema );

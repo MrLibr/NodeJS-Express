@@ -1,8 +1,9 @@
 import { model, Schema } from 'mongoose';
 import { ModelsConstants } from './../constants/models.constants';
+import { ICourse } from './course';
 
 export interface ICourse {
-  id?: string;
+  _id?: string;
   userId: string;
   title: string;
   price: number;

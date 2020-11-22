@@ -8,7 +8,7 @@ import { RouterConstants } from './constants/router.constants';
 import User from './models/user';
 import aboutRouters from './routers/about';
 import addCourseRouters from './routers/add';
-import cardRouters from './routers/card';
+import cardRouters from './routers/cart';
 import allCoursesRouters from './routers/courses';
 import homeRouters from './routers/home';
 
@@ -39,7 +39,7 @@ app.use( RouterConstants.ROOT, homeRouters );
 app.use( RouterConstants.ALL_COURSES, allCoursesRouters );
 app.use( RouterConstants.ADD, addCourseRouters );
 app.use( RouterConstants.ABOUT, aboutRouters );
-app.use( RouterConstants.CARD, cardRouters );
+app.use( RouterConstants.CART, cardRouters );
 
 serverStart();
 
