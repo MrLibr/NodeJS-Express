@@ -26,9 +26,6 @@ userSchema.methods.addToCart = function ( course: ICourse ): Promise<void> {
   const index: number = items
     .findIndex( ( item: ICartCourse ) => item.courseId.toString() === course._id?.toString() );
 
-  console.log( index );
-  console.log( this.cart );
-
   if ( index < 0 ) {
     items.push( { count: 1, courseId: course._id! } );
   } else {
