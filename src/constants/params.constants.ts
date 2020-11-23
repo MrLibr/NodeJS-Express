@@ -8,5 +8,6 @@ export enum ParamsConstants {
   CART_HEADER = 'Your Cart',
   USER_ID = 'userId',
   EMAIL = 'email',
-  NAME = 'name'
+  NAME = 'name',
+  COURSES_ID = 'cart.items.courseId'
 }

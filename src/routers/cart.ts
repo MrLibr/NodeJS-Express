@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { HTTPStatuses } from '../constants/http-statuses.constants';
 import { PathConstants } from '../constants/path.constants';
 import { RouterConstants } from '../constants/router.constants';
-import Cart, { ICart } from '../models/cart';
+import { ICart } from '../models/cart';
 import Course from '../models/course';
 import { ParamsConstants } from './../constants/params.constants';
 import { ICourse } from './../models/course';
@@ -16,7 +16,7 @@ const router = express.Router();
 
 router.get( RouterConstants.ROOT, async ( req: Request, res: Response ) => {
   const user: IUser = await req.user
-    .populate( 'cart.items.courseId' )
+    .populate( ParamsConstants.COURSES_ID )
     .execPopulate();
 
   const courses: IAdvancedCourse[] = mapToCart( user.cart );
@@ -37,8 +37,15 @@ router.post( RouterConstants.ADD, async ( req: Request, res: Response ) => {
 } );
 
 router.delete( RouterConstants.REMOVE + RouterConstants.BY_ID, async ( req: Request, res: Response ) => {
-  const cart: ICart = await Cart.remove( req.params.id );
-  res.status( HTTPStatuses.SUCCESS ).json( cart );
+  await req.user.removeFromCart( req.params.id );
+  const user: IUser = await req.user
+    .populate( ParamsConstants.COURSES_ID )
+    .execPopulate();
+
+  const courses: IAdvancedCourse[] = mapToCart( user.cart );
+  const totalPrice: number = computePrice( courses );
+
+  res.status( HTTPStatuses.SUCCESS ).json( { courses, totalPrice: totalPrice } );
 } );
 
 
