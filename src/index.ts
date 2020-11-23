@@ -11,6 +11,7 @@ import addCourseRouters from './routers/add';
 import cardRouters from './routers/cart';
 import allCoursesRouters from './routers/courses';
 import homeRouters from './routers/home';
+import ordersRouters from './routers/orders';
 
 
 const app = express();
@@ -39,6 +40,7 @@ app.use( RouterConstants.ROOT, homeRouters );
 app.use( RouterConstants.ALL_COURSES, allCoursesRouters );
 app.use( RouterConstants.ADD, addCourseRouters );
 app.use( RouterConstants.ABOUT, aboutRouters );
+app.use( RouterConstants.ORDERS, ordersRouters );
 app.use( RouterConstants.CART, cardRouters );
 
 serverStart();

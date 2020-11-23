@@ -9,5 +9,6 @@ export enum ParamsConstants {
   USER_ID = 'userId',
   EMAIL = 'email',
   NAME = 'name',
-  COURSES_ID = 'cart.items.courseId'
+  COURSES_ID = 'cart.items.courseId',
+  ORDERS_HEADER = 'Orders By | '
 }

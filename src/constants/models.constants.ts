@@ -1,5 +1,6 @@
 export enum ModelsConstants {
   COURSE = 'Course',
   USER = 'User',
-  CART = 'Cart'
+  CART = 'Cart',
+  ORDER = 'Order'
 }

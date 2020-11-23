@@ -8,7 +8,7 @@
     {{#if courses.length}}
     <table>
       <thead>
-        <tr>
+        <tr class="position-space-between">
           <th>Title:</th>
           <th>Price:</th>
           <th>Count:</th>
@@ -18,7 +18,7 @@
 
       <tbody>
         {{#each courses }}
-        <tr>
+        <tr class="position-space-between">
           <td>{{title}}</td>
           <td>{{price}}</td>
           <td>{{count}}</td>
@@ -34,10 +34,19 @@
 
     </table>
 
-    <p class="position-start">
-      <strong>Price: </strong>
-      <span class="price">{{totalPrice}}</span>
-    </p>
+    <div class="position-space-between">
+      <p class="position-start">
+        <strong>Price: </strong>
+        <span class="price">{{totalPrice}}</span>
+      </p>
+
+      <form
+        action="/orders"
+        method="POST"
+      >
+        <button class="btn green">Order</button>
+      </form>
+    </div>
     {{else}}
     <p>Now Your Card Is Empty, But You Can Fix It=)</p>
     {{/if}}
