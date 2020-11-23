@@ -49,4 +49,9 @@ userSchema.methods.removeFromCart = function ( id: string ): Promise<void> {
   return this.save();
 };
 
+userSchema.methods.clearCart = function (): Promise<void> {
+  this.cart.items = [];
+  return this.save();
+};
+
 export default model( ModelsConstants.USER, userSchema );

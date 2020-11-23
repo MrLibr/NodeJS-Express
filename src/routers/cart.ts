@@ -15,45 +15,53 @@ export interface IAdvancedCourse extends ICourse {
 const router = express.Router();
 
 router.get( RouterConstants.ROOT, async ( req: Request, res: Response ) => {
-  const user: IUser = await req.user
-    .populate( ParamsConstants.COURSES_ID )
-    .execPopulate();
+  try {
+    const user: IUser = await req.user.populate( ParamsConstants.CART_COURSES_ID ).execPopulate();
 
-  const courses: IAdvancedCourse[] = mapToCart( user.cart );
-  const totalPrice: number = computePrice( courses );
+    const courses: IAdvancedCourse[] = mapToCart( user.cart );
+    const totalPrice: number = computePrice( courses );
 
-  res.render( PathConstants.CART_PAGE, {
-    title: ParamsConstants.CART_HEADER,
-    isCart: true,
-    courses,
-    totalPrice
-  } );
+    res.render( PathConstants.CART_PAGE, {
+      title: ParamsConstants.CART_HEADER,
+      isCart: true,
+      courses,
+      totalPrice
+    } );
+  } catch ( error ) {
+    console.log( error );
+  }
 } );
 
 router.post( RouterConstants.ADD, async ( req: Request, res: Response ) => {
-  const course: ICourse = await Course.findById( req.body.id ).lean() as ICourse;
-  await req.user.addToCart( course );
-  res.redirect( RouterConstants.CART );
+  try {
+    const course: ICourse = await Course.findById( req.body.id ).lean() as ICourse;
+    await req.user.addToCart( course );
+    res.redirect( RouterConstants.CART );
+  } catch ( error ) {
+    console.log( error );
+  }
 } );
 
 router.delete( RouterConstants.REMOVE + RouterConstants.BY_ID, async ( req: Request, res: Response ) => {
-  await req.user.removeFromCart( req.params.id );
-  const user: IUser = await req.user
-    .populate( ParamsConstants.COURSES_ID )
-    .execPopulate();
+  try {
+    await req.user.removeFromCart( req.params.id );
+    const user: IUser = await req.user.populate( ParamsConstants.CART_COURSES_ID ).execPopulate();
 
-  const courses: IAdvancedCourse[] = mapToCart( user.cart );
-  const totalPrice: number = computePrice( courses );
+    const courses: IAdvancedCourse[] = mapToCart( user.cart );
+    const totalPrice: number = computePrice( courses );
 
-  res.status( HTTPStatuses.SUCCESS ).json( { courses, totalPrice: totalPrice } );
+    res.status( HTTPStatuses.SUCCESS ).json( { courses, totalPrice: totalPrice } );
+  } catch ( error ) {
+    console.log( error );
+  }
 } );
 
 
-function mapToCart( cart: ICart ): IAdvancedCourse[] {
+export function mapToCart( cart: ICart ): IAdvancedCourse[] {
   return cart.items.map( course => ( { ...course.courseId._doc, count: course.count } ) );
 }
 
-function computePrice( courses: IAdvancedCourse[] ): number {
+export function computePrice( courses: IAdvancedCourse[] ): number {
   return courses.reduce( ( total: number, currentCourse: IAdvancedCourse ) => total + currentCourse.count * currentCourse.price, 0 );
 }
 
