@@ -33,10 +33,16 @@
       <li><a href="/about">About Page</a></li>
       {{/if}}
 
-      {{#if isCard}}
-      <li class="active"><a href="/card">Card Page</a></li>
+      {{#if isOrders}}
+      <li class="active"><a href="/orders">Orders Page</a></li>
       {{else}}
-      <li><a href="/card">Card Page</a></li>
+      <li><a href="/orders">Orders Page</a></li>
+      {{/if}}
+
+      {{#if isCart}}
+      <li class="active"><a href="/cart">Cart Page</a></li>
+      {{else}}
+      <li><a href="/cart">Cart Page</a></li>
       {{/if}}
     </ul>
   </div>

@@ -6,7 +6,7 @@ export enum RouterConstants {
   ABOUT = '/about',
   ALL_COURSES = '/courses',
   ADD = '/add',
-  CARD = '/card',
-  REMOVE = '/remove'
-
+  CART = '/cart',
+  REMOVE = '/remove',
+  ORDERS = '/orders'
 }
