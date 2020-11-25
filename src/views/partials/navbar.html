@@ -21,16 +21,18 @@
       <li><a href="/courses">Courses Page</a></li>
       {{/if}}
 
-      {{#if isAddCourse}}
-      <li class="active"><a href="/add">Add Course Page</a></li>
-      {{else}}
-      <li><a href="/add">Add Course Page</a></li>
-      {{/if}}
-
       {{#if isAbout}}
       <li class="active"><a href="/about">About Page</a></li>
       {{else}}
       <li><a href="/about">About Page</a></li>
+      {{/if}}
+
+      {{#if isAuth}}
+
+      {{#if isAddCourse}}
+      <li class="active"><a href="/add">Add Course Page</a></li>
+      {{else}}
+      <li><a href="/add">Add Course Page</a></li>
       {{/if}}
 
       {{#if isOrders}}
@@ -45,10 +47,15 @@
       <li><a href="/cart">Cart Page</a></li>
       {{/if}}
 
-      {{#if isLogin}}
-      <li class="active"><a href="/auth">Login Page</a></li>
+      <li><a href="/auth/logout">LogOut</a></li>
       {{else}}
-      <li><a href="/auth">Login Page</a></li>
+
+      {{#if isLogin}}
+      <li class="active"><a href="/auth">LogIn</a></li>
+      {{else}}
+      <li><a href="/auth">LogIn</a></li>
+      {{/if}}
+
       {{/if}}
     </ul>
   </div>

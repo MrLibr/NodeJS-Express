@@ -1,10 +1,12 @@
 import express, { NextFunction } from 'express';
 import expressHandlebars from 'express-handlebars';
+import session from 'express-session';
 import mongoose from 'mongoose';
 import os from 'os';
 import { NamingConstants } from './constants/naming.constants';
 import { PathConstants } from './constants/path.constants';
 import { RouterConstants } from './constants/router.constants';
+import authMiddleware from './middleware/auth.middleware';
 import User from './models/user';
 import aboutRouters from './routers/about';
 import addCourseRouters from './routers/add';
@@ -36,6 +38,13 @@ app.use( async ( req: Request, res: Response, next: NextFunction ) => {
     console.log( error );
   }
 } );
+
+app.use( session( {
+  secret: 'Hi',
+  resave: false,
+  saveUninitialized: false
+} ) );
+app.use( authMiddleware );
 
 app.use( RouterConstants.ROOT, homeRouters );
 app.use( RouterConstants.AUTH, authRouters );
