@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import guardMiddleware from '../middleware/guard.middleware';
+import guardMiddleware from '../middleware/guard-routers.middleware';
 import { ParamsConstants } from './../constants/params.constants';
 import { PathConstants } from './../constants/path.constants';
 import { RouterConstants } from './../constants/router.constants';

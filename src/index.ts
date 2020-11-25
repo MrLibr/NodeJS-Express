@@ -9,6 +9,7 @@ import { NamingConstants } from './constants/naming.constants';
 import { PathConstants } from './constants/path.constants';
 import { RouterConstants } from './constants/router.constants';
 import authMiddleware from './middleware/auth.middleware';
+import createUserModelMiddleware from './middleware/create-user-model.middleware';
 import aboutRouters from './routers/about';
 import addCourseRouters from './routers/add';
 import authRouters from './routers/auth';
@@ -43,6 +44,7 @@ app.use( session( {
   store
 } ) );
 app.use( authMiddleware );
+app.use( createUserModelMiddleware );
 
 app.use( RouterConstants.ROOT, homeRouters );
 app.use( RouterConstants.AUTH, authRouters );

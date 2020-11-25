@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { PathConstants } from '../constants/path.constants';
 import { RouterConstants } from '../constants/router.constants';
-import guardMiddleware from '../middleware/guard.middleware';
+import guardMiddleware from '../middleware/guard-routers.middleware';
 import { NamingConstants } from './../constants/naming.constants';
 import { ParamsConstants } from './../constants/params.constants';
 import Course from './../models/course';
@@ -59,7 +59,6 @@ router.get( RouterConstants.EDIT_BY_ID, guardMiddleware, async ( req: Request, r
 } );
 
 router.post( RouterConstants.EDIT, guardMiddleware, async ( req: Request, res: Response ) => {
-  console.log( req.body.id );
   try {
     await Course.findByIdAndUpdate( req.body.id, req.body );
     res.redirect( RouterConstants.ALL_COURSES );
