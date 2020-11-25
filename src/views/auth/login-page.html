@@ -1,0 +1,149 @@
+<div class="auth">
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs">
+        <li class="tab col s6">
+          <a
+            class="active"
+            href="#login"
+          >Log In</a>
+        </li>
+        <li class="tab col s6">
+          <a href="#register">Register</a>
+        </li>
+      </ul>
+    </div>
+    <div
+      id="login"
+      class="col s6 offset-s3"
+    >
+
+      <h3 class="fixed-width">Welcome Back, My Friend!</h3>
+
+      <form
+        action="/"
+        method="POST"
+        class="fixed-width auth"
+      >
+        <div class="input-field">
+          <input
+            placeholder="Please, Write Your Email"
+            id="email"
+            name="email"
+            type="email"
+            class="validate"
+            required
+          >
+          <label for="email">Email</label>
+          <span
+            class="helper-text"
+            data-error="Please, Write Correct Email"
+          ></span>
+        </div>
+
+        <div class="input-field">
+          <input
+            placeholder="Please, Write Your Password"
+            id="password"
+            name="password"
+            type="password"
+            class="validate"
+            required
+          >
+          <label for="password">Password</label>
+          <span
+            class="helper-text"
+            data-error="Please, Write Correct Password"
+          ></span>
+        </div>
+
+        <button
+          class="btn btn-primary"
+          type="submit"
+        >Log In</button>
+      </form>
+    </div>
+
+    <div
+      id="register"
+      class="col s6 offset-s3"
+    >
+
+      <h3 class="fixed-width">Hello, We Can Be Friends!</h3>
+      <form
+        action="/"
+        method="POST"
+        class="fixed-width auth"
+      >
+        <div class="input-field">
+          <input
+            placeholder="Please, Write Email"
+            id="remail"
+            name="email"
+            type="email"
+            class="validate"
+            required
+          >
+          <label for="remail">Email</label>
+          <span
+            class="helper-text"
+            data-error="Please, Write Correct Email"
+          ></span>
+        </div>
+
+        <div class="input-field">
+          <input
+            placeholder="Please, Write Your NickName"
+            id="nickname"
+            name="nickname"
+            type="text"
+            class="validate"
+            required
+          >
+          <label for="nickname">NickName</label>
+          <span
+            class="helper-text"
+            data-error="Please, Write Correct NickName"
+          ></span>
+        </div>
+
+        <div class="input-field">
+          <input
+            placeholder="Please, Write Password"
+            id="rpassword"
+            name="password"
+            type="password"
+            class="validate"
+            required
+          >
+          <label for="rpassword">Password</label>
+          <span
+            class="helper-text"
+            data-error="Please, Write Correct Password"
+          ></span>
+        </div>
+
+        <div class="input-field">
+          <input
+            placeholder="Please, Repeat Password"
+            id="confirm"
+            name="confirm"
+            type="password"
+            class="validate"
+            required
+          >
+          <label for="confirm">Repeat Password</label>
+          <span
+            class="helper-text"
+            data-error="Your Password Don't Correct"
+          ></span>
+        </div>
+
+        <button
+          class="btn green"
+          type="submit"
+        >Registration</button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -8,6 +8,7 @@ import { RouterConstants } from './constants/router.constants';
 import User from './models/user';
 import aboutRouters from './routers/about';
 import addCourseRouters from './routers/add';
+import authRouters from './routers/auth';
 import cardRouters from './routers/cart';
 import allCoursesRouters from './routers/courses';
 import homeRouters from './routers/home';
@@ -37,6 +38,7 @@ app.use( async ( req: Request, res: Response, next: NextFunction ) => {
 } );
 
 app.use( RouterConstants.ROOT, homeRouters );
+app.use( RouterConstants.AUTH, authRouters );
 app.use( RouterConstants.ALL_COURSES, allCoursesRouters );
 app.use( RouterConstants.ADD, addCourseRouters );
 app.use( RouterConstants.ABOUT, aboutRouters );

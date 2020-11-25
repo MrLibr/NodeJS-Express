@@ -9,5 +9,7 @@ export enum PathConstants {
   CART_PAGE = 'cart-page',
   VIEWS_FOLDER_STANDART = 'views',
   VIEWS_FOLDER_CUSTOM = 'src/views',
-  PUBLIC_FOLDER = 'public'
+  PUBLIC_FOLDER = 'public',
+  AUTH_FOLDER = 'auth/',
+  LOGIN_PAGE = 'login-page'
 }

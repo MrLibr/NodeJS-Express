@@ -105,3 +105,7 @@
 .order-container hr {
   width: 100%;
 }
+
+.auth {
+  padding-top: 3rem;
+}
