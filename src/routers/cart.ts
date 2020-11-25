@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { HTTPStatuses } from '../constants/http-statuses.constants';
 import { PathConstants } from '../constants/path.constants';
 import { RouterConstants } from '../constants/router.constants';
+import guardMiddleware from '../middleware/guard.middleware';
 import { ICart } from '../models/cart';
 import Course from '../models/course';
 import { ParamsConstants } from './../constants/params.constants';
@@ -14,7 +15,7 @@ export interface IAdvancedCourse extends ICourse {
 
 const router = express.Router();
 
-router.get( RouterConstants.ROOT, async ( req: Request, res: Response ) => {
+router.get( RouterConstants.ROOT, guardMiddleware, async ( req: Request, res: Response ) => {
   try {
     const user: IUser = await req.user.populate( ParamsConstants.CART_COURSES_ID ).execPopulate();
 
@@ -32,17 +33,24 @@ router.get( RouterConstants.ROOT, async ( req: Request, res: Response ) => {
   }
 } );
 
-router.post( RouterConstants.ADD, async ( req: Request, res: Response ) => {
+router.post( RouterConstants.ADD, guardMiddleware, async ( req: Request, res: Response ) => {
   try {
+
     const course: ICourse = await Course.findById( req.body.id ).lean() as ICourse;
-    await req.user.addToCart( course );
-    res.redirect( RouterConstants.CART );
+    const currentUser = req.session.user;
+
+    if ( currentUser ) {
+      await currentUser.addToCart( course );
+      res.redirect( RouterConstants.CART );
+    } else {
+      res.redirect( RouterConstants.AUTH );
+    }
   } catch ( error ) {
     console.log( error );
   }
 } );
 
-router.delete( RouterConstants.REMOVE + RouterConstants.BY_ID, async ( req: Request, res: Response ) => {
+router.delete( RouterConstants.REMOVE + RouterConstants.BY_ID, guardMiddleware, async ( req: Request, res: Response ) => {
   try {
     await req.user.removeFromCart( req.params.id );
     const user: IUser = await req.user.populate( ParamsConstants.CART_COURSES_ID ).execPopulate();

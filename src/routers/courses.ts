@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { PathConstants } from '../constants/path.constants';
 import { RouterConstants } from '../constants/router.constants';
+import guardMiddleware from '../middleware/guard.middleware';
 import { NamingConstants } from './../constants/naming.constants';
 import { ParamsConstants } from './../constants/params.constants';
 import Course from './../models/course';
@@ -37,7 +38,7 @@ router.get( RouterConstants.BY_ID, async ( req: Request, res: Response ) => {
   }
 } );
 
-router.get( RouterConstants.EDIT_BY_ID, async ( req: Request, res: Response ) => {
+router.get( RouterConstants.EDIT_BY_ID, guardMiddleware, async ( req: Request, res: Response ) => {
   const { allow } = req.query;
 
   if ( !allow ) {
@@ -57,7 +58,7 @@ router.get( RouterConstants.EDIT_BY_ID, async ( req: Request, res: Response ) =>
   }
 } );
 
-router.post( RouterConstants.EDIT, async ( req: Request, res: Response ) => {
+router.post( RouterConstants.EDIT, guardMiddleware, async ( req: Request, res: Response ) => {
   console.log( req.body.id );
   try {
     await Course.findByIdAndUpdate( req.body.id, req.body );
@@ -67,7 +68,7 @@ router.post( RouterConstants.EDIT, async ( req: Request, res: Response ) => {
   }
 } );
 
-router.post( RouterConstants.REMOVE, async ( req: Request, res: Response ) => {
+router.post( RouterConstants.REMOVE, guardMiddleware, async ( req: Request, res: Response ) => {
   try {
     await Course.findByIdAndDelete( req.body.id );
     res.redirect( RouterConstants.ALL_COURSES );

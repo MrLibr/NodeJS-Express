@@ -1,13 +1,14 @@
-import express, { NextFunction } from 'express';
+import connectMongoSession from 'connect-mongodb-session';
+import express from 'express';
 import expressHandlebars from 'express-handlebars';
 import session from 'express-session';
 import mongoose from 'mongoose';
 import os from 'os';
+import { ConfigConstants } from './constants/config.constants';
 import { NamingConstants } from './constants/naming.constants';
 import { PathConstants } from './constants/path.constants';
 import { RouterConstants } from './constants/router.constants';
 import authMiddleware from './middleware/auth.middleware';
-import User from './models/user';
 import aboutRouters from './routers/about';
 import addCourseRouters from './routers/add';
 import authRouters from './routers/auth';
@@ -23,26 +24,23 @@ const handlebars = expressHandlebars.create( {
   extname: NamingConstants.HANDLEBARS
 } );
 
+const MongoDBStore = connectMongoSession( session );
+const store = new MongoDBStore( {
+  collection: NamingConstants.COLLECTION_SESSION,
+  uri: ConfigConstants.MONGO_DB_URI
+} );
+
 app.engine( NamingConstants.HANDLEBARS, handlebars.engine );
 app.set( NamingConstants.VIEW_ENGINE, NamingConstants.HANDLEBARS );
 app.set( PathConstants.VIEWS_FOLDER_STANDART, PathConstants.VIEWS_FOLDER_CUSTOM );
 
 app.use( express.static( PathConstants.PUBLIC_FOLDER ) );
 app.use( express.urlencoded( { extended: true } ) );
-app.use( async ( req: Request, res: Response, next: NextFunction ) => {
-  try {
-    const currentUser = await User.findById( '5fb7d139ad5c1462c95ad0a3' );
-    req.user = currentUser;
-    next();
-  } catch ( error ) {
-    console.log( error );
-  }
-} );
-
 app.use( session( {
-  secret: 'Hi',
+  secret: ConfigConstants.SECRET_KEY,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  store
 } ) );
 app.use( authMiddleware );
 
@@ -59,25 +57,12 @@ serverStart();
 async function serverStart() {
   try {
     const PORT: string | number = process.env.PORT || 3000;
-    const url: string = `mongodb+srv://Libr:26ZzcP4IBlap5p0L@courseshop.1blve.mongodb.net/coursesShop`;
 
-    await mongoose.connect( url, {
+    await mongoose.connect( ConfigConstants.MONGO_DB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false
     } );
-
-    const condidate = await User.findOne().lean();
-
-    if ( !condidate ) {
-      const newUser = new User( {
-        email: 'max@gmail.com',
-        name: 'Maxim',
-        card: { items: [] }
-      } );
-
-      await newUser.save();
-    }
 
     app.listen( PORT, () => {
       console.log( `Server Is Running with OS: ${ os.platform() } ${ os.arch() }... You Can Watch This http://localhost:${ PORT }` );

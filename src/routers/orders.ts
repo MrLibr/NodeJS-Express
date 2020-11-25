@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import guardMiddleware from '../middleware/guard.middleware';
 import { ParamsConstants } from './../constants/params.constants';
 import { PathConstants } from './../constants/path.constants';
 import { RouterConstants } from './../constants/router.constants';
@@ -7,7 +8,7 @@ import { IUser } from './../models/user';
 
 const router = express.Router();
 
-router.get( RouterConstants.ROOT, async ( req: Request, res: Response ) => {
+router.get( RouterConstants.ROOT, guardMiddleware, async ( req: Request, res: Response ) => {
   try {
     const orders = await Order
       .find( { 'userId': req.user._id } )
@@ -24,7 +25,7 @@ router.get( RouterConstants.ROOT, async ( req: Request, res: Response ) => {
   }
 } );
 
-router.post( RouterConstants.ROOT, async ( req: Request, res: Response ) => {
+router.post( RouterConstants.ROOT, guardMiddleware, async ( req: Request, res: Response ) => {
   try {
     const user: IUser = await req.user.populate( ParamsConstants.CART_COURSES_ID ).execPopulate();
     const courses = [ ...user.cart.items ];
