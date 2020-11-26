@@ -105,3 +105,29 @@
 .order-container hr {
   width: 100%;
 }
+
+.auth {
+  padding-top: 3rem;
+}
+
+.alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+
+  text-align: center;
+
+  background-color: rgba(255, 0, 0, 0.45);
+  color: darkred;
+  border-radius: 15px;
+}
+
+.success {
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+
+  text-align: center;
+
+  background-color: rgba(0, 255, 0, 0.45);
+  color: darkgreen;
+  border-radius: 15px;
+}

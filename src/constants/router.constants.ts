@@ -1,12 +1,18 @@
 export enum RouterConstants {
   ROOT = '/',
-  BY_ID = '/:id',
-  EDIT_BY_ID = '/:id/edit',
+  AUTH = '/auth',
   EDIT = '/edit',
   ABOUT = '/about',
   ALL_COURSES = '/courses',
   ADD = '/add',
   CART = '/cart',
   REMOVE = '/remove',
-  ORDERS = '/orders'
+  ORDERS = '/orders',
+  LOGIN = '/login',
+  LOGOUT = '/logout',
+  REGISTER = '/register',
+  BY_ID = '/:id',
+  EDIT_BY_ID = '/:id/edit',
+  HAS_LOGIN = '#login',
+  HAS_REGISTER = '#register'
 }

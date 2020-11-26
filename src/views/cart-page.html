@@ -1,6 +1,14 @@
 <div class="position-center">
   <h1>Your Cart:</h1>
 
+  {{#if successOperation}}
+  <p class="success">{{successOperation}}</p>
+  {{/if}}
+
+  {{#if deleteError}}
+  <p class="alert">{{deleteError}}</p>
+  {{/if}}
+
   <div
     id="cart"
     class="fixed-width"
@@ -26,6 +34,7 @@
             <button
               class="btn btn-small js-remove"
               data-id="{{_id}}"
+              data-csrf="{{@root.csrf}}"
             >Delete</button>
           </td>
         </tr>
@@ -44,6 +53,13 @@
         action="/orders"
         method="POST"
       >
+
+        <input
+          type="hidden"
+          name="_csrf"
+          value="{{csrf}}"
+        >
+
         <button class="btn green">Order</button>
       </form>
     </div>

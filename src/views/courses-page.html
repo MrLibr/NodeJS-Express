@@ -19,17 +19,27 @@
     <div class="position-space-between">
       <div class="card-action position-start">
         <p><a href="/courses/{{_id}}">Open Course</a></p>
+
+        {{#if @root.isAuth}}
         <p><a href="/courses/{{_id}}/edit?allow=false">Edit Course</a></p>
+        {{/if}}
       </div>
       <form
         action="/cart/add"
-        method="post"
+        method="POST"
       >
         <input
           type="hidden"
           name="id"
           value="{{_id}}"
         >
+
+        <input
+          type="hidden"
+          name="_csrf"
+          value="{{@root.csrf}}"
+        >
+
         <button class="btn btn-primary">Add To Card</button>
       </form>
     </div>
