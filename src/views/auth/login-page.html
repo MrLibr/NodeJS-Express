@@ -20,6 +20,14 @@
 
       <h3 class="fixed-width">Welcome Back, My Friend!</h3>
 
+      {{#if loginError}}
+      <p class="alert">{{loginError}}</p>
+      {{/if}}
+
+      {{#if successOperation}}
+      <p class="success">{{successOperation}}</p>
+      {{/if}}
+
       <form
         action="/auth/login"
         method="POST"
@@ -76,6 +84,11 @@
     >
 
       <h3 class="fixed-width">Hello, We Can Be Friends!</h3>
+
+      {{#if registerError}}
+      <p class="alert">{{registerError}}</p>
+      {{/if}}
+
       <form
         action="/auth/register"
         method="POST"

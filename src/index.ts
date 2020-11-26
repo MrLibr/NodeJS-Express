@@ -1,3 +1,4 @@
+import flash from 'connect-flash';
 import connectMongoSession from 'connect-mongodb-session';
 import csurf from 'csurf';
 import express from 'express';
@@ -46,6 +47,7 @@ app.use( session( {
   store
 } ) );
 app.use( csurf() );
+app.use( flash() );
 app.use( authMiddleware );
 app.use( tokenMiddleware );
 app.use( createUserModelMiddleware );
