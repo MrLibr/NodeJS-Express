@@ -1,4 +1,5 @@
 import connectMongoSession from 'connect-mongodb-session';
+import csurf from 'csurf';
 import express from 'express';
 import expressHandlebars from 'express-handlebars';
 import session from 'express-session';
@@ -10,6 +11,7 @@ import { PathConstants } from './constants/path.constants';
 import { RouterConstants } from './constants/router.constants';
 import authMiddleware from './middleware/auth.middleware';
 import createUserModelMiddleware from './middleware/create-user-model.middleware';
+import tokenMiddleware from './middleware/token.middleware';
 import aboutRouters from './routers/about';
 import addCourseRouters from './routers/add';
 import authRouters from './routers/auth';
@@ -43,7 +45,9 @@ app.use( session( {
   saveUninitialized: false,
   store
 } ) );
+app.use( csurf() );
 app.use( authMiddleware );
+app.use( tokenMiddleware );
 app.use( createUserModelMiddleware );
 
 app.use( RouterConstants.ROOT, homeRouters );

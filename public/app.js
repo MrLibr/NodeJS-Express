@@ -16,11 +16,11 @@ function toFormateDate( date ) {
   } ).format( new Date( date ) );
 }
 
-function createNewCart( cart ) {
+function createNewCart( cart, csrf ) {
   if ( cart.courses.length ) {
     const html = cart.courses.map( course => {
       return `
-    <tr>
+    <tr class="position-space-between">
       <td> ${course.title}</td>
       <td>${course.price}</td>
       <td>${course.count}</td>
@@ -28,6 +28,7 @@ function createNewCart( cart ) {
         <button
           class="btn btn-small js-remove"
           data-id="${course._id}"
+          data-csrf="${csrf}"
         >Delete</button>
       </td>
     </tr>`;
@@ -54,10 +55,11 @@ if ( $cart ) {
   $cart.addEventListener( 'click', ( event ) => {
     if ( event.target.classList.contains( 'js-remove' ) ) {
       const id = event.target.dataset.id;
+      const csrf = event.target.dataset.csrf;
 
-      fetch( 'cart/remove/' + id, { method: 'delete' } )
+      fetch( 'cart/remove/' + id, { method: 'delete', headers: { 'X-XSRF-TOKEN': csrf } } )
         .then( response => response.json() )
-        .then( createNewCart );
+        .then( cart => createNewCart( cart, csrf ) );
     }
   } );
 }
