@@ -1,11 +1,11 @@
 import express, { Request, Response } from 'express';
 import { HTTPStatuses } from '../constants/http-statuses.constants';
 import { PathConstants } from '../constants/path.constants';
-import { RouterConstants } from '../constants/router.constants';
 import guardMiddleware from '../middleware/guard-routers.middleware';
 import { ICart } from '../models/cart';
 import Course from '../models/course';
 import { ParamsConstants } from './../constants/params.constants';
+import { RouterConstants } from './../constants/router.constants';
 import { ICourse } from './../models/course';
 import { IUser } from './../models/user';
 
@@ -43,7 +43,7 @@ router.post( RouterConstants.ADD, guardMiddleware, async ( req: Request, res: Re
       await req.user.addToCart( course );
       res.redirect( RouterConstants.CART );
     } else {
-      res.redirect( RouterConstants.AUTH );
+      res.redirect( RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
     }
   } catch ( error ) {
     console.log( error );

@@ -6,6 +6,7 @@ import { ICourse } from './course';
 export interface IUser {
   email: string;
   name: string;
+  password: string;
   cart: ICart;
 };
 
@@ -15,6 +16,10 @@ export const userSchema: Schema<IUser> = new Schema<IUser>( {
     required: true
   },
   name: {
+    type: String,
+    required: true
+  },
+  password: {
     type: String,
     required: true
   },
