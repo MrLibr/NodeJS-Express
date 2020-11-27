@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express';
 import { PathConstants } from '../constants/path.constants';
 import { RouterConstants } from '../constants/router.constants';
 import guardMiddleware from '../middleware/guard-routers.middleware';
+import { notificationSuccessDeleteCourse, notificationSuccessUpdateCourse } from '../services/notification.service';
+import { ErrorTypes } from './../constants/error-message.constants';
 import { NamingConstants } from './../constants/naming.constants';
 import { ParamsConstants } from './../constants/params.constants';
 import Course from './../models/course';
@@ -17,7 +19,8 @@ router.get( RouterConstants.ROOT, async ( req: Request, res: Response ) => {
     res.render( PathConstants.ALL_COURSES, {
       title: ParamsConstants.ALL_COURSES_PAGE,
       isAllCourses: true,
-      courses
+      courses,
+      successOperation: req.flash( ErrorTypes.SUCCESS_OPERATION )
     } );
   } catch ( error ) {
     console.log( error );
@@ -61,7 +64,7 @@ router.get( RouterConstants.EDIT_BY_ID, guardMiddleware, async ( req: Request, r
 router.post( RouterConstants.EDIT, guardMiddleware, async ( req: Request, res: Response ) => {
   try {
     await Course.findByIdAndUpdate( req.body.id, req.body );
-    res.redirect( RouterConstants.ALL_COURSES );
+    notificationSuccessUpdateCourse( req, res );
   } catch ( error ) {
     console.log( error );
   }
@@ -70,7 +73,7 @@ router.post( RouterConstants.EDIT, guardMiddleware, async ( req: Request, res: R
 router.post( RouterConstants.REMOVE, guardMiddleware, async ( req: Request, res: Response ) => {
   try {
     await Course.findByIdAndDelete( req.body.id );
-    res.redirect( RouterConstants.ALL_COURSES );
+    notificationSuccessDeleteCourse( req, res );
   } catch ( error ) {
     console.log( error );
   }

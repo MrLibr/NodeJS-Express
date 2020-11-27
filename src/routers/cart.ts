@@ -4,6 +4,7 @@ import { PathConstants } from '../constants/path.constants';
 import guardMiddleware from '../middleware/guard-routers.middleware';
 import { ICart } from '../models/cart';
 import Course from '../models/course';
+import { deleteErrorNotification, notificationErrorAuthorization, notificationSuccessAddToCart, successNotification } from '../services/notification.service';
 import { ErrorMessages, ErrorTypes } from './../constants/error-message.constants';
 import { ParamsConstants } from './../constants/params.constants';
 import { RouterConstants } from './../constants/router.constants';
@@ -43,11 +44,9 @@ router.post( RouterConstants.ADD, guardMiddleware, async ( req: Request, res: Re
 
     if ( currentUser ) {
       await req.user.addToCart( course );
-      req.flash( ErrorTypes.SUCCESS_OPERATION, ErrorMessages.ADD_TO_CART );
-      res.redirect( RouterConstants.CART );
+      notificationSuccessAddToCart( req, res );
     } else {
-      req.flash( ErrorTypes.LOGIN_ERROR, ErrorMessages.AUTHORIZATION );
-      res.redirect( RouterConstants.AUTH );
+      notificationErrorAuthorization( req, res );
     }
   } catch ( error ) {
     console.log( error );
@@ -62,10 +61,10 @@ router.delete( RouterConstants.REMOVE + RouterConstants.BY_ID, guardMiddleware, 
     const courses: IAdvancedCourse[] = mapToCart( user.cart );
     const totalPrice: number = computePrice( courses );
 
-    req.flash( ErrorTypes.SUCCESS_OPERATION, ErrorMessages.REMOVE_COURSE_SUCCESS );
+    successNotification( req, ErrorMessages.REMOVE_COURSE_SUCCESS );
     res.status( HTTPStatuses.SUCCESS ).json( { courses, totalPrice: totalPrice } );
   } catch ( error ) {
-    req.flash( ErrorTypes.DELETE_ERROR, ErrorMessages.REMOVE_COURSE_FAILED );
+    deleteErrorNotification( req, ErrorMessages.REMOVE_COURSE_FAILED );
     console.log( error );
   }
 } );

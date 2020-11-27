@@ -1,5 +1,9 @@
 <h1 class="position-center">All Courses:</h1>
 
+{{#if successOperation}}
+<p class="success">{{successOperation}}</p>
+{{/if}}
+
 {{#if courses.length}}
 
 {{#each courses}}

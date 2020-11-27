@@ -3,7 +3,9 @@ import express, { Request, Response } from 'express';
 import { ConfigConstants } from '../constants/config.constants';
 import { PathConstants } from '../constants/path.constants';
 import User from '../models/user';
-import { ErrorMessages, ErrorTypes } from './../constants/error-message.constants';
+import { sendSuccessRegisterMail } from '../services/mail.service';
+import { notificationEmailBusy, notificationLogout, notificationSuccessRegistry, notificationUserNotFound, notificationWrongPassword } from '../services/notification.service';
+import { ErrorTypes } from './../constants/error-message.constants';
 import { ParamsConstants } from './../constants/params.constants';
 import { RouterConstants } from './../constants/router.constants';
 
@@ -39,13 +41,11 @@ router.post( RouterConstants.LOGIN, async ( req: Request, res: Response ) => {
           }
         } );
       } else {
-        req.flash( ErrorTypes.LOGIN_ERROR, ErrorMessages.THIS_PASSWORD_WRONG );
-        res.redirect( RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
+        notificationWrongPassword( req, res );
       }
 
     } else {
-      req.flash( ErrorTypes.LOGIN_ERROR, ErrorMessages.THIS_USER_NOT_FOUND );
-      res.redirect( RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
+      notificationUserNotFound( req, res );
     }
   } catch ( error ) {
     console.log( error );
@@ -54,8 +54,7 @@ router.post( RouterConstants.LOGIN, async ( req: Request, res: Response ) => {
 
 router.get( RouterConstants.LOGOUT, async ( req: Request, res: Response ) => {
   req.session.destroy( () => {
-    req.flash( ErrorTypes.SUCCESS_OPERATION, ErrorMessages.LOGOUT );
-    res.redirect( RouterConstants.AUTH );
+    notificationLogout( req, res );
   } );
 } );
 
@@ -65,15 +64,14 @@ router.post( RouterConstants.REGISTER, async ( req: Request, res: Response ) => 
     const condidate = await User.findOne( { email } );
 
     if ( condidate ) {
-      req.flash( ErrorTypes.REGISTER_ERROR, ErrorMessages.THIS_EMAIL_BUSY );
-      res.redirect( RouterConstants.AUTH + RouterConstants.HAS_REGISTER );
+      notificationEmailBusy( req, res );
     } else {
-      const cryptedPassword: string = await bcryptjs.hash( password, ConfigConstants.COUNT_SALT );
+      const cryptedPassword: string = await bcryptjs.hash( password, +ConfigConstants.PASSWORD_SECRET_KEY );
       const newUser = new User( { email, name, password: cryptedPassword, cart: { items: [] } } );
       await newUser.save();
 
-      req.flash( ErrorTypes.SUCCESS_OPERATION, ErrorMessages.CONGRATULATION_REGISTRY );
-      res.redirect( RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
+      await sendSuccessRegisterMail( email );
+      notificationSuccessRegistry( req, res );
     }
   } catch ( error ) {
     console.log( error );

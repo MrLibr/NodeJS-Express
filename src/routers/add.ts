@@ -3,6 +3,7 @@ import { ParamsConstants } from '../constants/params.constants';
 import { PathConstants } from '../constants/path.constants';
 import { RouterConstants } from '../constants/router.constants';
 import guardMiddleware from '../middleware/guard-routers.middleware';
+import { notificationSuccessAddNewCourse } from '../services/notification.service';
 import Course from './../models/course';
 
 const router = express.Router();
@@ -20,7 +21,7 @@ router.post( RouterConstants.ROOT, guardMiddleware, async ( req: Request, res: R
 
   try {
     await course.save();
-    res.redirect( RouterConstants.ALL_COURSES );
+    notificationSuccessAddNewCourse( req, res );
   } catch ( error ) {
     console.log( error );
   }
