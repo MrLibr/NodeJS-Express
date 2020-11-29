@@ -6,6 +6,6 @@ export enum ConfigConstants {
   PASSWORD_NOTIFICATION_SERVICE = 'Qaz1234567',
   SESSION_SECRET_KEY = 'Session Secret Key',
   PASSWORD_SECRET_KEY = '12',
-  SUPPORT_COMPANY_MAIL = 'support.mephistos@gmail.com',
+  RESET_SIZE_KEY = '32',
   BASE_SITE_URL = 'http://localhost:3000'
 }

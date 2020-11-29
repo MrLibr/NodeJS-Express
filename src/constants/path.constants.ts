@@ -8,6 +8,7 @@ export enum PathConstants {
   ORDERS_PAGE = 'orders-page',
   CART_PAGE = 'cart-page',
   LOGIN_PAGE = 'login-page',
+  RESET_PAGE = 'reset-page',
   VIEWS_FOLDER_STANDART = 'views',
   VIEWS_FOLDER_CUSTOM = 'src/views',
   PUBLIC_FOLDER = 'public',

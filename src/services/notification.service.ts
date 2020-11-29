@@ -11,8 +11,12 @@ export function redirectTo( res: Response, redirectTo: RouterConstants | string 
   res.redirect( redirectTo );
 }
 
-function loginErrorNotification( req: Request, message: ErrorMessages ): void {
+export function loginErrorNotification( req: Request, message: ErrorMessages ): void {
   notification( req, ErrorTypes.LOGIN_ERROR, message );
+}
+
+export function errorNotification( req: Request, message: ErrorMessages ): void {
+  notification( req, ErrorTypes.UNDEFINED_ERROR, message );
 }
 
 export function successNotification( req: Request, message: ErrorMessages ): void {
@@ -39,12 +43,22 @@ export function notificationUserNotFound( req: Request, res: Response ): void {
 
 export function notificationErrorAuthorization( req: Request, res: Response ): void {
   loginErrorNotification( req, ErrorMessages.AUTHORIZATION );
-  redirectTo( res, RouterConstants.AUTH );
+  redirectTo( res, RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
 }
 
 export function notificationEmailBusy( req: Request, res: Response ): void {
   registerErrorNotification( req, ErrorMessages.THIS_EMAIL_BUSY );
   redirectTo( res, RouterConstants.AUTH + RouterConstants.HAS_REGISTER );
+}
+
+export function notificationEmailNotFound( req: Request, res: Response ): void {
+  loginErrorNotification( req, ErrorMessages.THIS_EMAIL_NOT_EXIST );
+  redirectTo( res, RouterConstants.AUTH + RouterConstants.RESET );
+}
+
+export function notificationSomethingWasWrong( req: Request, res: Response ): void {
+  errorNotification( req, ErrorMessages.SOMETHING_WAS_WRONG );
+  redirectTo( res, RouterConstants.AUTH + RouterConstants.RESET );
 }
 
 export function notificationSuccessAddNewCourse( req: Request, res: Response ): void {
@@ -67,10 +81,10 @@ export function notificationSuccessRegistry( req: Request, res: Response ): void
   redirectTo( res, RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
 }
 
-// export function notificationLogout( req: Request, res: Response ): void {
-//   successNotification( req, ErrorMessages.LOGOUT );
-//   redirectTo( res, RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
-// }
+export function notificationSendResetPasswordMail( req: Request, res: Response ): void {
+  successNotification( req, ErrorMessages.SEND_RESET_PASSWORD_MAIL );
+  redirectTo( res, RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
+}
 
 export function notificationSuccessAddToCart( req: Request, res: Response ): void {
   successNotification( req, ErrorMessages.ADD_TO_CART );

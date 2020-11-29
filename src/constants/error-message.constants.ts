@@ -3,6 +3,7 @@ export enum ErrorTypes {
   REGISTER_ERROR = 'registerError',
   SUCCESS_OPERATION = 'successOperation',
   DELETE_ERROR = 'deleteError',
+  UNDEFINED_ERROR = 'undefinedError'
 }
 
 export enum ErrorMessages {
@@ -15,6 +16,9 @@ export enum ErrorMessages {
   REMOVE_COURSE_SUCCESS = 'This Course Was Deleted',
   REMOVE_COURSE_FAILED = "We Haven't Delete This Course",
   LOGOUT = 'You Left This Page',
-  CONGRATULATION_REGISTRY = 'Congratulation You. You Was Register Success',
+  CONGRATULATION_REGISTRY = 'Congratulation. You Was Register Success',
   SUCCESS_UPDATE_COURSE = 'This Course Was Updated',
+  THIS_EMAIL_NOT_EXIST = 'This Email Not Exist. Maybe You Forgot Your Email?',
+  SEND_RESET_PASSWORD_MAIL = 'We Send Mail On Your Email. Please Check Your Email',
+  SOMETHING_WAS_WRONG = 'Something Was Wrong. Please Try Again',
 }
