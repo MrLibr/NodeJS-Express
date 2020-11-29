@@ -7,7 +7,7 @@ function notification( req: Request, types: ErrorTypes, message: ErrorMessages )
   req.flash( types, message );
 }
 
-function redirectTo( res: Response, redirectTo: RouterConstants | string ): void {
+export function redirectTo( res: Response, redirectTo: RouterConstants | string ): void {
   res.redirect( redirectTo );
 }
 
@@ -67,10 +67,10 @@ export function notificationSuccessRegistry( req: Request, res: Response ): void
   redirectTo( res, RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
 }
 
-export function notificationLogout( req: Request, res: Response ): void {
-  successNotification( req, ErrorMessages.LOGOUT );
-  redirectTo( res, RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
-}
+// export function notificationLogout( req: Request, res: Response ): void {
+//   successNotification( req, ErrorMessages.LOGOUT );
+//   redirectTo( res, RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
+// }
 
 export function notificationSuccessAddToCart( req: Request, res: Response ): void {
   successNotification( req, ErrorMessages.ADD_TO_CART );

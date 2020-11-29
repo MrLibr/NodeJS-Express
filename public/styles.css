@@ -25,6 +25,12 @@
   align-items: center;
 }
 
+.position-end {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 .price {
   font-size: 2rem;
 }

@@ -4,8 +4,8 @@ import { ConfigConstants } from '../constants/config.constants';
 import { PathConstants } from '../constants/path.constants';
 import User from '../models/user';
 import { sendSuccessRegisterMail } from '../services/mail.service';
-import { notificationEmailBusy, notificationLogout, notificationSuccessRegistry, notificationUserNotFound, notificationWrongPassword } from '../services/notification.service';
-import { ErrorTypes } from './../constants/error-message.constants';
+import { notificationEmailBusy, notificationSuccessRegistry, notificationUserNotFound, notificationWrongPassword, redirectTo, successNotification } from '../services/notification.service';
+import { ErrorMessages, ErrorTypes } from './../constants/error-message.constants';
 import { ParamsConstants } from './../constants/params.constants';
 import { RouterConstants } from './../constants/router.constants';
 
@@ -53,9 +53,8 @@ router.post( RouterConstants.LOGIN, async ( req: Request, res: Response ) => {
 } );
 
 router.get( RouterConstants.LOGOUT, async ( req: Request, res: Response ) => {
-  req.session.destroy( () => {
-    notificationLogout( req, res );
-  } );
+  successNotification( req, ErrorMessages.LOGOUT );
+  req.session.destroy( () => redirectTo( res, RouterConstants.AUTH + RouterConstants.HAS_LOGIN ) );
 } );
 
 router.post( RouterConstants.REGISTER, async ( req: Request, res: Response ) => {
@@ -70,7 +69,7 @@ router.post( RouterConstants.REGISTER, async ( req: Request, res: Response ) => 
       const newUser = new User( { email, name, password: cryptedPassword, cart: { items: [] } } );
       await newUser.save();
 
-      await sendSuccessRegisterMail( email );
+      sendSuccessRegisterMail( email );
       notificationSuccessRegistry( req, res );
     }
   } catch ( error ) {
