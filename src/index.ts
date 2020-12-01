@@ -25,7 +25,8 @@ import ordersRouters from './routers/orders';
 const app = express();
 const handlebars = expressHandlebars.create( {
   defaultLayout: NamingConstants.MAIN_LAYOUT,
-  extname: NamingConstants.HANDLEBARS
+  extname: NamingConstants.HANDLEBARS,
+  helpers: require( './utils/handlebars.helpers' )
 } );
 
 const MongoDBStore = connectMongoSession( session );

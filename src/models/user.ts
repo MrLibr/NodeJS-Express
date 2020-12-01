@@ -1,5 +1,6 @@
 import { model, Schema } from 'mongoose';
 import { ModelsConstants } from './../constants/models.constants';
+import { UserStatus } from './../constants/params.constants';
 import { cartSchema, ICart, ICartCourse } from './cart';
 import { ICourse } from './course';
 
@@ -24,6 +25,10 @@ export const userSchema: Schema<IUser> = new Schema<IUser>( {
   password: {
     type: String,
     required: true
+  },
+  status: {
+    type: String,
+    default: UserStatus.GUEST
   },
   cart: cartSchema,
   resetToken: {

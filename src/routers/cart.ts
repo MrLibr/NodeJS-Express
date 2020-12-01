@@ -2,18 +2,14 @@ import express, { Request, Response } from 'express';
 import { HTTPStatuses } from '../constants/http-statuses.constants';
 import { PathConstants } from '../constants/path.constants';
 import guardMiddleware from '../middleware/guard-routers.middleware';
-import { ICart } from '../models/cart';
 import Course from '../models/course';
 import { deleteErrorNotification, notificationErrorAuthorization, notificationSuccessAddToCart, successNotification } from '../services/notification.service';
+import { computePrice, IAdvancedCourse, mapToCart } from '../utils/router.helpers';
 import { ErrorMessages, ErrorTypes } from './../constants/error-message.constants';
 import { ParamsConstants } from './../constants/params.constants';
 import { RouterConstants } from './../constants/router.constants';
 import { ICourse } from './../models/course';
 import { IUser } from './../models/user';
-
-export interface IAdvancedCourse extends ICourse {
-  count: number;
-}
 
 const router = express.Router();
 
@@ -68,14 +64,5 @@ router.delete( RouterConstants.REMOVE + RouterConstants.BY_ID, guardMiddleware, 
     console.log( error );
   }
 } );
-
-
-export function mapToCart( cart: ICart ): IAdvancedCourse[] {
-  return cart.items.map( course => ( { ...course.courseId._doc, count: course.count } ) );
-}
-
-export function computePrice( courses: IAdvancedCourse[] ): number {
-  return courses.reduce( ( total: number, currentCourse: IAdvancedCourse ) => total + currentCourse.count * currentCourse.price, 0 );
-}
 
 export default router;

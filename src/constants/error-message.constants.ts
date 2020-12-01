@@ -23,4 +23,5 @@ export enum ErrorMessages {
   SEND_RESET_PASSWORD_MAIL = 'We Send Mail On Your Email. Please Check Your Email',
   SOMETHING_WAS_WRONG = 'Something Was Wrong. Please Try Again',
   TOKEN_NOT_EXIST = 'This Token Not Exist. Please Try Again',
+  HAVE_NOT_PERMISSION = "Sorry, But You Don't Have Required Permissions",
 }

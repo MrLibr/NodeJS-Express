@@ -1,9 +1,10 @@
 import express, { Request, Response } from 'express';
 import guardMiddleware from '../middleware/guard-routers.middleware';
+import { getTotalOrder } from '../utils/router.helpers';
 import { ParamsConstants } from './../constants/params.constants';
 import { PathConstants } from './../constants/path.constants';
 import { RouterConstants } from './../constants/router.constants';
-import Order from './../models/order';
+import Order, { IOrder } from './../models/order';
 import { IUser } from './../models/user';
 
 const router = express.Router();
@@ -11,9 +12,9 @@ const router = express.Router();
 router.get( RouterConstants.ROOT, guardMiddleware, async ( req: Request, res: Response ) => {
   try {
     const orders = await Order
-      .find( { 'userId': req.user._id } )
+      .find( { [ ParamsConstants.USER_ID ]: req.user._id } )
       .populate( ParamsConstants.USER_ID )
-      .populate( ParamsConstants.COURSES_ID ).lean();
+      .populate( ParamsConstants.COURSES_ID ).lean() as IOrder[];
 
     res.render( PathConstants.ORDERS_PAGE, {
       isOrders: true,
@@ -40,13 +41,4 @@ router.post( RouterConstants.ROOT, guardMiddleware, async ( req: Request, res: R
   }
 } );
 
-function getTotalOrder( orders ) {
-  return orders.map( order => ( {
-    id: order._id,
-    courses: order.courses,
-    data: new Date( order.createDate ).toLocaleDateString(),
-    user: order.userId,
-    price: order.courses.reduce( ( total, course ) => total += course.count * course.courseId.price, 0 )
-  } ) );
-}
 export default router;

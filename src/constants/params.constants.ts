@@ -16,3 +16,9 @@ export enum ParamsConstants {
   CART_COURSES_ID = 'cart.items.courseId',
   COURSES_ID = 'courses.courseId'
 }
+
+export enum UserStatus {
+  ADMIN = 'ADMIN',
+  MODERATOR = 'MODERATOR',
+  GUEST = 'GUEST'
+}

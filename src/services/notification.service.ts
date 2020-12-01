@@ -66,6 +66,11 @@ export function notificationThisTokenNotExist( req: Request, res: Response ): vo
   redirectTo( res, RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
 }
 
+export function notificationNotPermission( req: Request, res: Response ): void {
+  errorNotification( req, ErrorMessages.HAVE_NOT_PERMISSION );
+  redirectTo( res, RouterConstants.ALL_COURSES );
+}
+
 export function notificationSuccessAddNewCourse( req: Request, res: Response ): void {
   successNotification( req, ErrorMessages.ADD_NEW_COURSE_SUCCESS );
   redirectTo( res, RouterConstants.ALL_COURSES );
