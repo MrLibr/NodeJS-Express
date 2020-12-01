@@ -37,13 +37,13 @@ export function sendSuccessRegisterMail( clientMail: string ): void {
 
 export function sendResetPasswordMail( clientMail: string, token: string ): void {
   const { BASE_SITE_URL, MAIL_NOTIFICATION_SERVICE } = ConfigConstants;
-  const { AUTH, RESET, ROOT } = RouterConstants;
+  const { AUTH, RECOVERY, ROOT } = RouterConstants;
 
   const message: string = `
   <h1>Do You Forget Password?</h1>
   <p>If You Don't Want Reset Password, Please Ignore This Message</p>
   <p>Else, Please Go To The Link Down:</p>
-  <a href="${ BASE_SITE_URL }${ AUTH }${ RESET }${ ROOT }${ token }">Reset Your Password</a>
+  <a href="${ BASE_SITE_URL }${ AUTH }${ RECOVERY }${ ROOT }${ token }">Reset Your Password</a>
   <hr/>
   <a href="${ BASE_SITE_URL }"><strong>Our Website</strong></a>
   `;

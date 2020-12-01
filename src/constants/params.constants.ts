@@ -5,6 +5,7 @@ export enum ParamsConstants {
   ALL_COURSES_PAGE = 'Courses Page',
   ADD_COURSE_PAGE = 'Add Course Page',
   RESET_PAGE = 'Do You Forget Password?',
+  RECOVERY_PAGE = 'Change Password',
   ORDERS_HEADER = 'Orders By | ',
   COURSE_HEADER = 'Li:br | ',
   EDIT_COURSE_HEADER = 'Edit | ',

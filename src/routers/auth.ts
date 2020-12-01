@@ -4,7 +4,7 @@ import express, { Request, Response } from 'express';
 import { ConfigConstants } from '../constants/config.constants';
 import User from '../models/user';
 import { sendResetPasswordMail, sendSuccessRegisterMail } from '../services/mail.service';
-import { notificationEmailBusy, notificationEmailNotFound, notificationSendResetPasswordMail, notificationSomethingWasWrong, notificationSuccessRegistry, notificationUserNotFound, notificationWrongPassword, redirectTo, successNotification } from '../services/notification.service';
+import { notificationEmailBusy, notificationEmailNotFound, notificationSendResetPasswordMail, notificationSomethingWasWrong, notificationSuccessChangePassword, notificationSuccessRegistry, notificationThisTokenNotExist, notificationUserNotFound, notificationWrongPassword, redirectTo, successNotification } from '../services/notification.service';
 import { ErrorMessages, ErrorTypes } from './../constants/error-message.constants';
 import { ParamsConstants } from './../constants/params.constants';
 import { PathConstants } from './../constants/path.constants';
@@ -18,7 +18,8 @@ router.get( RouterConstants.ROOT, ( req: Request, res: Response ) => {
     isLogin: true,
     loginError: req.flash( ErrorTypes.LOGIN_ERROR ),
     registerError: req.flash( ErrorTypes.REGISTER_ERROR ),
-    successOperation: req.flash( ErrorTypes.SUCCESS_OPERATION )
+    successOperation: req.flash( ErrorTypes.SUCCESS_OPERATION ),
+    undefinedError: req.flash( ErrorTypes.UNDEFINED_ERROR )
   } );
 } );
 
@@ -109,6 +110,58 @@ router.post( RouterConstants.RESET, async ( req: Request, res: Response ) => {
       } );
     } else {
       notificationEmailNotFound( req, res );
+    }
+  } catch ( error ) {
+    console.log( error );
+  }
+} );
+
+router.get( RouterConstants.RECOVERY + RouterConstants.BY_ID, async ( req: Request, res: Response ) => {
+  const { id } = req.params;
+
+  if ( !id ) {
+    return notificationThisTokenNotExist( req, res );
+  }
+
+  try {
+    const currentUser = await User.findOne( {
+      resetToken: id,
+      resetTokenExp: { $gt: Date.now() }
+    } );
+
+    if ( currentUser ) {
+      res.render( PathConstants.AUTH_FOLDER + PathConstants.RECOVERY_PASSWORD_PAGE, {
+        title: ParamsConstants.RECOVERY_PAGE,
+        userId: currentUser._id.toString(),
+        token: currentUser.resetToken,
+        loginError: req.flash( ErrorTypes.LOGIN_ERROR ),
+        undefinedError: req.flash( ErrorTypes.UNDEFINED_ERROR )
+      } );
+    } else {
+      return notificationUserNotFound( req, res );
+    }
+  } catch ( error ) {
+    console.log( error );
+  }
+} );
+
+router.post( RouterConstants.RECOVERY, async ( req: Request, res: Response ) => {
+  try {
+    const { password, repeatPassword, userId, token } = req.body;
+    const currentUser = await User.findOne( {
+      _id: userId,
+      resetToken: token,
+      resetTokenExp: { $gt: Date.now() }
+    } );
+
+    if ( currentUser ) {
+      currentUser.password = await bcryptjs.hash( password, +ConfigConstants.PASSWORD_SECRET_KEY );
+      currentUser.resetToken = undefined;
+      currentUser.resetTokenExp = undefined;
+      await currentUser.save();
+      notificationSuccessChangePassword( req, res );
+    } else {
+      return notificationUserNotFound( req, res );
     }
   } catch ( error ) {
     console.log( error );

@@ -61,6 +61,11 @@ export function notificationSomethingWasWrong( req: Request, res: Response ): vo
   redirectTo( res, RouterConstants.AUTH + RouterConstants.RESET );
 }
 
+export function notificationThisTokenNotExist( req: Request, res: Response ): void {
+  errorNotification( req, ErrorMessages.TOKEN_NOT_EXIST );
+  redirectTo( res, RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
+}
+
 export function notificationSuccessAddNewCourse( req: Request, res: Response ): void {
   successNotification( req, ErrorMessages.ADD_NEW_COURSE_SUCCESS );
   redirectTo( res, RouterConstants.ALL_COURSES );
@@ -89,4 +94,9 @@ export function notificationSendResetPasswordMail( req: Request, res: Response )
 export function notificationSuccessAddToCart( req: Request, res: Response ): void {
   successNotification( req, ErrorMessages.ADD_TO_CART );
   redirectTo( res, RouterConstants.CART );
+}
+
+export function notificationSuccessChangePassword( req: Request, res: Response ): void {
+  successNotification( req, ErrorMessages.SUCCESS_CHANGE_PASSWORD );
+  redirectTo( res, RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
 }

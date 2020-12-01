@@ -61,8 +61,8 @@ router.delete( RouterConstants.REMOVE + RouterConstants.BY_ID, guardMiddleware, 
     const courses: IAdvancedCourse[] = mapToCart( user.cart );
     const totalPrice: number = computePrice( courses );
 
-    successNotification( req, ErrorMessages.REMOVE_COURSE_SUCCESS );
     res.status( HTTPStatuses.SUCCESS ).json( { courses, totalPrice: totalPrice } );
+    successNotification( req, ErrorMessages.REMOVE_COURSE_SUCCESS );
   } catch ( error ) {
     deleteErrorNotification( req, ErrorMessages.REMOVE_COURSE_FAILED );
     console.log( error );
