@@ -2,9 +2,12 @@ import express, { Request, Response } from 'express';
 import { PathConstants } from '../constants/path.constants';
 import { RouterConstants } from '../constants/router.constants';
 import guardMiddleware from '../middleware/guard-routers.middleware';
+import { notificationNotPermission, notificationSuccessDeleteCourse, notificationSuccessUpdateCourse } from '../services/notification.service';
+import { isOwnerOrAdmin } from '../utils/router.helpers';
+import { ErrorTypes } from './../constants/error-message.constants';
 import { NamingConstants } from './../constants/naming.constants';
 import { ParamsConstants } from './../constants/params.constants';
-import Course from './../models/course';
+import Course, { ICourse } from './../models/course';
 
 const router = express.Router();
 
@@ -17,7 +20,11 @@ router.get( RouterConstants.ROOT, async ( req: Request, res: Response ) => {
     res.render( PathConstants.ALL_COURSES, {
       title: ParamsConstants.ALL_COURSES_PAGE,
       isAllCourses: true,
-      courses
+      courses,
+      userId: req.user._id.toString() || null,
+      userStatus: req.user.status || null,
+      successOperation: req.flash( ErrorTypes.SUCCESS_OPERATION ),
+      undefinedError: req.flash( ErrorTypes.UNDEFINED_ERROR )
     } );
   } catch ( error ) {
     console.log( error );
@@ -46,12 +53,17 @@ router.get( RouterConstants.EDIT_BY_ID, guardMiddleware, async ( req: Request, r
   } else {
 
     try {
-      const course = await Course.findById( req.params.id ).lean();
+      const course = await Course.findById( req.params.id ).lean() as ICourse;
 
-      res.render( PathConstants.EDIT_COURSE_PAGE, {
-        title: ParamsConstants.EDIT_COURSE_HEADER + course?.title,
-        course
-      } );
+      if ( isOwnerOrAdmin( req, course ) ) {
+        res.render( PathConstants.EDIT_COURSE_PAGE, {
+          title: ParamsConstants.EDIT_COURSE_HEADER + course?.title,
+          course
+        } );
+      } else {
+        return notificationNotPermission( req, res );
+      }
+
     } catch ( error ) {
       console.log( error );
     }
@@ -60,8 +72,14 @@ router.get( RouterConstants.EDIT_BY_ID, guardMiddleware, async ( req: Request, r
 
 router.post( RouterConstants.EDIT, guardMiddleware, async ( req: Request, res: Response ) => {
   try {
-    await Course.findByIdAndUpdate( req.body.id, req.body );
-    res.redirect( RouterConstants.ALL_COURSES );
+    const course = await Course.findById( req.body.id ).lean() as ICourse;
+
+    if ( isOwnerOrAdmin( req, course ) ) {
+      await Course.findByIdAndUpdate( req.body.id, req.body );
+      notificationSuccessUpdateCourse( req, res );
+    } else {
+      return notificationNotPermission( req, res );
+    }
   } catch ( error ) {
     console.log( error );
   }
@@ -69,8 +87,15 @@ router.post( RouterConstants.EDIT, guardMiddleware, async ( req: Request, res: R
 
 router.post( RouterConstants.REMOVE, guardMiddleware, async ( req: Request, res: Response ) => {
   try {
-    await Course.findByIdAndDelete( req.body.id );
-    res.redirect( RouterConstants.ALL_COURSES );
+    const course = await Course.findById( req.body.id ).lean() as ICourse;
+
+    if ( isOwnerOrAdmin( req, course ) ) {
+      await Course.findByIdAndDelete( req.body.id );
+      notificationSuccessDeleteCourse( req, res );
+    } else {
+      return notificationNotPermission( req, res );
+    }
+
   } catch ( error ) {
     console.log( error );
   }

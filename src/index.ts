@@ -25,7 +25,8 @@ import ordersRouters from './routers/orders';
 const app = express();
 const handlebars = expressHandlebars.create( {
   defaultLayout: NamingConstants.MAIN_LAYOUT,
-  extname: NamingConstants.HANDLEBARS
+  extname: NamingConstants.HANDLEBARS,
+  helpers: require( './utils/handlebars.helpers' )
 } );
 
 const MongoDBStore = connectMongoSession( session );
@@ -41,7 +42,7 @@ app.set( PathConstants.VIEWS_FOLDER_STANDART, PathConstants.VIEWS_FOLDER_CUSTOM 
 app.use( express.static( PathConstants.PUBLIC_FOLDER ) );
 app.use( express.urlencoded( { extended: true } ) );
 app.use( session( {
-  secret: ConfigConstants.SECRET_KEY,
+  secret: ConfigConstants.SESSION_SECRET_KEY,
   resave: false,
   saveUninitialized: false,
   store

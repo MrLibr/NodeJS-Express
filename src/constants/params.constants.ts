@@ -4,6 +4,8 @@ export enum ParamsConstants {
   ABOUT_PAGE = 'About Page',
   ALL_COURSES_PAGE = 'Courses Page',
   ADD_COURSE_PAGE = 'Add Course Page',
+  RESET_PAGE = 'Do You Forget Password?',
+  RECOVERY_PAGE = 'Change Password',
   ORDERS_HEADER = 'Orders By | ',
   COURSE_HEADER = 'Li:br | ',
   EDIT_COURSE_HEADER = 'Edit | ',
@@ -13,4 +15,10 @@ export enum ParamsConstants {
   USER_ID = 'userId',
   CART_COURSES_ID = 'cart.items.courseId',
   COURSES_ID = 'courses.courseId'
+}
+
+export enum UserStatus {
+  ADMIN = 'ADMIN',
+  MODERATOR = 'MODERATOR',
+  GUEST = 'GUEST'
 }

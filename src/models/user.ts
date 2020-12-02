@@ -1,5 +1,6 @@
 import { model, Schema } from 'mongoose';
 import { ModelsConstants } from './../constants/models.constants';
+import { UserStatus } from './../constants/params.constants';
 import { cartSchema, ICart, ICartCourse } from './cart';
 import { ICourse } from './course';
 
@@ -8,6 +9,8 @@ export interface IUser {
   name: string;
   password: string;
   cart: ICart;
+  resetToken?: string;
+  resetTokenExp?: Date;
 };
 
 export const userSchema: Schema<IUser> = new Schema<IUser>( {
@@ -23,7 +26,17 @@ export const userSchema: Schema<IUser> = new Schema<IUser>( {
     type: String,
     required: true
   },
-  cart: cartSchema
+  status: {
+    type: String,
+    default: UserStatus.GUEST
+  },
+  cart: cartSchema,
+  resetToken: {
+    type: String
+  },
+  resetTokenExp: {
+    type: Date
+  }
 } );
 
 userSchema.methods.addToCart = function ( course: ICourse ): Promise<void> {

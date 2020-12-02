@@ -20,14 +20,6 @@
 
       <h3 class="fixed-width">Welcome Back, My Friend!</h3>
 
-      {{#if loginError}}
-      <p class="alert">{{loginError}}</p>
-      {{/if}}
-
-      {{#if successOperation}}
-      <p class="success">{{successOperation}}</p>
-      {{/if}}
-
       <form
         action="/auth/login"
         method="POST"
@@ -71,10 +63,14 @@
           value="{{csrf}}"
         >
 
-        <button
-          class="btn btn-primary"
-          type="submit"
-        >Log In</button>
+        <div class="position-space-between">
+          <p><a href="/auth/reset">Do You Forget Password?</a></p>
+
+          <button
+            class="btn btn-primary"
+            type="submit"
+          >Log In</button>
+        </div>
       </form>
     </div>
 
@@ -84,10 +80,6 @@
     >
 
       <h3 class="fixed-width">Hello, We Can Be Friends!</h3>
-
-      {{#if registerError}}
-      <p class="alert">{{registerError}}</p>
-      {{/if}}
 
       <form
         action="/auth/register"

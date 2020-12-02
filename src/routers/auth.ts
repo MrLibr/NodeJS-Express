@@ -1,10 +1,13 @@
 import bcryptjs from 'bcryptjs';
+import crypto from 'crypto';
 import express, { Request, Response } from 'express';
 import { ConfigConstants } from '../constants/config.constants';
-import { PathConstants } from '../constants/path.constants';
 import User from '../models/user';
+import { sendResetPasswordMail, sendSuccessRegisterMail } from '../services/mail.service';
+import { notificationEmailBusy, notificationEmailNotFound, notificationSendResetPasswordMail, notificationSomethingWasWrong, notificationSuccessChangePassword, notificationSuccessRegistry, notificationThisTokenNotExist, notificationUserNotFound, notificationWrongPassword, redirectTo, successNotification } from '../services/notification.service';
 import { ErrorMessages, ErrorTypes } from './../constants/error-message.constants';
 import { ParamsConstants } from './../constants/params.constants';
+import { PathConstants } from './../constants/path.constants';
 import { RouterConstants } from './../constants/router.constants';
 
 const router = express.Router();
@@ -15,7 +18,8 @@ router.get( RouterConstants.ROOT, ( req: Request, res: Response ) => {
     isLogin: true,
     loginError: req.flash( ErrorTypes.LOGIN_ERROR ),
     registerError: req.flash( ErrorTypes.REGISTER_ERROR ),
-    successOperation: req.flash( ErrorTypes.SUCCESS_OPERATION )
+    successOperation: req.flash( ErrorTypes.SUCCESS_OPERATION ),
+    undefinedError: req.flash( ErrorTypes.UNDEFINED_ERROR )
   } );
 } );
 
@@ -39,13 +43,11 @@ router.post( RouterConstants.LOGIN, async ( req: Request, res: Response ) => {
           }
         } );
       } else {
-        req.flash( ErrorTypes.LOGIN_ERROR, ErrorMessages.THIS_PASSWORD_WRONG );
-        res.redirect( RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
+        notificationWrongPassword( req, res );
       }
 
     } else {
-      req.flash( ErrorTypes.LOGIN_ERROR, ErrorMessages.THIS_USER_NOT_FOUND );
-      res.redirect( RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
+      notificationUserNotFound( req, res );
     }
   } catch ( error ) {
     console.log( error );
@@ -53,10 +55,8 @@ router.post( RouterConstants.LOGIN, async ( req: Request, res: Response ) => {
 } );
 
 router.get( RouterConstants.LOGOUT, async ( req: Request, res: Response ) => {
-  req.session.destroy( () => {
-    req.flash( ErrorTypes.SUCCESS_OPERATION, ErrorMessages.LOGOUT );
-    res.redirect( RouterConstants.AUTH );
-  } );
+  successNotification( req, ErrorMessages.LOGOUT );
+  req.session.destroy( () => redirectTo( res, RouterConstants.AUTH + RouterConstants.HAS_LOGIN ) );
 } );
 
 router.post( RouterConstants.REGISTER, async ( req: Request, res: Response ) => {
@@ -65,15 +65,103 @@ router.post( RouterConstants.REGISTER, async ( req: Request, res: Response ) => 
     const condidate = await User.findOne( { email } );
 
     if ( condidate ) {
-      req.flash( ErrorTypes.REGISTER_ERROR, ErrorMessages.THIS_EMAIL_BUSY );
-      res.redirect( RouterConstants.AUTH + RouterConstants.HAS_REGISTER );
+      notificationEmailBusy( req, res );
     } else {
-      const cryptedPassword: string = await bcryptjs.hash( password, ConfigConstants.COUNT_SALT );
+      const cryptedPassword: string = await bcryptjs.hash( password, +ConfigConstants.PASSWORD_SECRET_KEY );
       const newUser = new User( { email, name, password: cryptedPassword, cart: { items: [] } } );
       await newUser.save();
 
-      req.flash( ErrorTypes.SUCCESS_OPERATION, ErrorMessages.CONGRATULATION_REGISTRY );
-      res.redirect( RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
+      sendSuccessRegisterMail( email );
+      notificationSuccessRegistry( req, res );
+    }
+  } catch ( error ) {
+    console.log( error );
+  }
+} );
+
+router.get( RouterConstants.RESET, ( req: Request, res: Response ) => {
+  res.render( PathConstants.AUTH_FOLDER + PathConstants.RESET_PAGE, {
+    title: ParamsConstants.RESET_PAGE,
+    loginError: req.flash( ErrorTypes.LOGIN_ERROR ),
+    undefinedError: req.flash( ErrorTypes.UNDEFINED_ERROR )
+  } );
+} );
+
+router.post( RouterConstants.RESET, async ( req: Request, res: Response ) => {
+  try {
+    const { email } = req.body;
+    const condidate = await User.findOne( { email } );
+
+    if ( condidate ) {
+
+      crypto.randomBytes( +ConfigConstants.RESET_SIZE_KEY, ( error: Error | null, buffer: Buffer ) => {
+        if ( error ) {
+          notificationSomethingWasWrong( req, res );
+        }
+
+        const token: string = buffer.toString( 'hex' );
+
+        condidate.resetToken = token;
+        condidate.resetTokenExp = Date.now() + 60 * 60 * 1000;
+        condidate.save();
+
+        sendResetPasswordMail( condidate.email, token );
+        notificationSendResetPasswordMail( req, res );
+      } );
+    } else {
+      notificationEmailNotFound( req, res );
+    }
+  } catch ( error ) {
+    console.log( error );
+  }
+} );
+
+router.get( RouterConstants.RECOVERY + RouterConstants.BY_ID, async ( req: Request, res: Response ) => {
+  const { id } = req.params;
+
+  if ( !id ) {
+    return notificationThisTokenNotExist( req, res );
+  }
+
+  try {
+    const currentUser = await User.findOne( {
+      resetToken: id,
+      resetTokenExp: { $gt: Date.now() }
+    } );
+
+    if ( currentUser ) {
+      res.render( PathConstants.AUTH_FOLDER + PathConstants.RECOVERY_PASSWORD_PAGE, {
+        title: ParamsConstants.RECOVERY_PAGE,
+        userId: currentUser._id.toString(),
+        token: currentUser.resetToken,
+        loginError: req.flash( ErrorTypes.LOGIN_ERROR ),
+        undefinedError: req.flash( ErrorTypes.UNDEFINED_ERROR )
+      } );
+    } else {
+      return notificationUserNotFound( req, res );
+    }
+  } catch ( error ) {
+    console.log( error );
+  }
+} );
+
+router.post( RouterConstants.RECOVERY, async ( req: Request, res: Response ) => {
+  try {
+    const { password, repeatPassword, userId, token } = req.body;
+    const currentUser = await User.findOne( {
+      _id: userId,
+      resetToken: token,
+      resetTokenExp: { $gt: Date.now() }
+    } );
+
+    if ( currentUser ) {
+      currentUser.password = await bcryptjs.hash( password, +ConfigConstants.PASSWORD_SECRET_KEY );
+      currentUser.resetToken = undefined;
+      currentUser.resetTokenExp = undefined;
+      await currentUser.save();
+      notificationSuccessChangePassword( req, res );
+    } else {
+      return notificationUserNotFound( req, res );
     }
   } catch ( error ) {
     console.log( error );

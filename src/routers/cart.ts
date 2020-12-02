@@ -2,17 +2,14 @@ import express, { Request, Response } from 'express';
 import { HTTPStatuses } from '../constants/http-statuses.constants';
 import { PathConstants } from '../constants/path.constants';
 import guardMiddleware from '../middleware/guard-routers.middleware';
-import { ICart } from '../models/cart';
 import Course from '../models/course';
+import { deleteErrorNotification, notificationErrorAuthorization, notificationSuccessAddToCart, successNotification } from '../services/notification.service';
+import { computePrice, IAdvancedCourse, mapToCart } from '../utils/router.helpers';
 import { ErrorMessages, ErrorTypes } from './../constants/error-message.constants';
 import { ParamsConstants } from './../constants/params.constants';
 import { RouterConstants } from './../constants/router.constants';
 import { ICourse } from './../models/course';
 import { IUser } from './../models/user';
-
-export interface IAdvancedCourse extends ICourse {
-  count: number;
-}
 
 const router = express.Router();
 
@@ -43,11 +40,9 @@ router.post( RouterConstants.ADD, guardMiddleware, async ( req: Request, res: Re
 
     if ( currentUser ) {
       await req.user.addToCart( course );
-      req.flash( ErrorTypes.SUCCESS_OPERATION, ErrorMessages.ADD_TO_CART );
-      res.redirect( RouterConstants.CART );
+      notificationSuccessAddToCart( req, res );
     } else {
-      req.flash( ErrorTypes.LOGIN_ERROR, ErrorMessages.AUTHORIZATION );
-      res.redirect( RouterConstants.AUTH );
+      notificationErrorAuthorization( req, res );
     }
   } catch ( error ) {
     console.log( error );
@@ -62,21 +57,12 @@ router.delete( RouterConstants.REMOVE + RouterConstants.BY_ID, guardMiddleware, 
     const courses: IAdvancedCourse[] = mapToCart( user.cart );
     const totalPrice: number = computePrice( courses );
 
-    req.flash( ErrorTypes.SUCCESS_OPERATION, ErrorMessages.REMOVE_COURSE_SUCCESS );
     res.status( HTTPStatuses.SUCCESS ).json( { courses, totalPrice: totalPrice } );
+    successNotification( req, ErrorMessages.REMOVE_COURSE_SUCCESS );
   } catch ( error ) {
-    req.flash( ErrorTypes.DELETE_ERROR, ErrorMessages.REMOVE_COURSE_FAILED );
+    deleteErrorNotification( req, ErrorMessages.REMOVE_COURSE_FAILED );
     console.log( error );
   }
 } );
-
-
-export function mapToCart( cart: ICart ): IAdvancedCourse[] {
-  return cart.items.map( course => ( { ...course.courseId._doc, count: course.count } ) );
-}
-
-export function computePrice( courses: IAdvancedCourse[] ): number {
-  return courses.reduce( ( total: number, currentCourse: IAdvancedCourse ) => total + currentCourse.count * currentCourse.price, 0 );
-}
 
 export default router;
