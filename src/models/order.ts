@@ -2,6 +2,7 @@ import { model, Schema } from 'mongoose';
 import { ModelsConstants } from './../constants/models.constants';
 
 export interface IOrder {
+  _id?: string;
   courses: {
     courseId: string;
     count: number;

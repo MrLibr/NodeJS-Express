@@ -12,9 +12,11 @@ export enum ParamsConstants {
   CART_HEADER = 'Your Cart',
   EMAIL = 'email',
   NAME = 'name',
+  PASSWORD = 'password',
+  REPEAT_PASSWORD = 'repeatPassword',
   USER_ID = 'userId',
   CART_COURSES_ID = 'cart.items.courseId',
-  COURSES_ID = 'courses.courseId'
+  COURSES_ID = 'courses.courseId',
 }
 
 export enum UserStatus {

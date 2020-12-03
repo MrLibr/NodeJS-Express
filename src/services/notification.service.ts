@@ -1,14 +1,15 @@
 import { Request, Response } from 'express';
 import { ErrorTypes } from '../constants/error-message.constants';
 import { ErrorMessages } from './../constants/error-message.constants';
+import { HTTPStatuses } from './../constants/http-statuses.constants';
 import { RouterConstants } from './../constants/router.constants';
 
 function notification( req: Request, types: ErrorTypes, message: ErrorMessages ): void {
   req.flash( types, message );
 }
 
-export function redirectTo( res: Response, redirectTo: RouterConstants | string ): void {
-  res.redirect( redirectTo );
+export function redirectTo( res: Response, path: RouterConstants | string ): void {
+  res.redirect( path );
 }
 
 export function loginErrorNotification( req: Request, message: ErrorMessages ): void {
@@ -29,6 +30,11 @@ function registerErrorNotification( req: Request, message: ErrorMessages ): void
 
 export function deleteErrorNotification( req: Request, message: ErrorMessages ): void {
   notification( req, ErrorTypes.DELETE_ERROR, message );
+}
+
+export function validationNotification( req: Request, res: Response, message: ErrorMessages, path: RouterConstants | string ): void {
+  notification( req, ErrorTypes.UNDEFINED_ERROR, message );
+  return res.status( HTTPStatuses.UNPROCESSABLE_ENTITY ).redirect( path );
 }
 
 export function notificationWrongPassword( req: Request, res: Response ): void {

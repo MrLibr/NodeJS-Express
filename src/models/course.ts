@@ -1,6 +1,5 @@
 import { model, Schema } from 'mongoose';
 import { ModelsConstants } from './../constants/models.constants';
-import { ICourse } from './course';
 
 export interface ICourse {
   _id?: string;
