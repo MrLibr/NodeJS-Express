@@ -11,6 +11,7 @@ export enum ParamsConstants {
   COURSE_HEADER = 'Li:br | ',
   EDIT_COURSE_HEADER = 'Edit | ',
   CART_HEADER = 'Your Cart',
+  PROFILE_HEADER = 'Profile | ',
   EMAIL = 'email',
   NAME = 'name',
   PASSWORD = 'password',

@@ -137,3 +137,38 @@
   color: darkgreen;
   border-radius: 15px;
 }
+
+.status-font {
+  font-size: 12px;
+  font-style: italic;
+  color: darkgreen;
+}
+
+.alert-font {
+  font-size: 18px;
+  font-style: italic;
+  color: red;
+}
+
+.ref-link {
+  font-size: 20px;
+  font-style: italic;
+  color: cadetblue;
+
+  outline: none;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ref-link:hover {
+  color: rgba(darkblue, 0.7);
+}
+
+.avatar {
+  max-width: 250px;
+  height: auto;
+
+  border: none;
+  border-radius: 25%;
+  box-shadow: 3px -2px 5px darkslategrey;
+}

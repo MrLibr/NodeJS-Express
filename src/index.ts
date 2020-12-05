@@ -21,6 +21,7 @@ import cardRouters from './routers/cart';
 import allCoursesRouters from './routers/courses';
 import homeRouters from './routers/home';
 import ordersRouters from './routers/orders';
+import profileRouters from './routers/profile';
 
 
 const app = express();
@@ -61,6 +62,7 @@ app.use( RouterConstants.ADD, addCourseRouters );
 app.use( RouterConstants.ABOUT, aboutRouters );
 app.use( RouterConstants.ORDERS, ordersRouters );
 app.use( RouterConstants.CART, cardRouters );
+app.use( RouterConstants.PROFILE, profileRouters );
 app.use( errorMiddleware );
 
 serverStart();

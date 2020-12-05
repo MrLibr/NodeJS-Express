@@ -1,0 +1,98 @@
+<div class="position-center">
+  <div class="position-space-between">
+    <h3>Profile | {{user.name}}:</h3>
+    <p>Status: <strong class="status-font">{{user.status}}</strong></p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col s6">
+    <form
+      action="/profile"
+      method="POST"
+    >
+
+      <div class="input-field">
+        <i class="material-icons prefix">email</i>
+        <input
+          id="email"
+          type="email"
+          class="validate"
+          value="{{user.email}}"
+          disabled
+        >
+        <label for="email">Email</label>
+      </div>
+
+      <div class="input-field">
+        <i class="material-icons prefix">account_circle</i>
+        <input
+          placeholder="Please, Write Your New NickName"
+          id="name"
+          name="name"
+          type="text"
+          class="validate"
+          value="{{user.name}}"
+          required
+        >
+        <label for="name">NickName</label>
+        <span
+          class="helper-text"
+          data-error="Please, Write Correct NickName"
+        ></span>
+      </div>
+
+      <div class="file-field input-field">
+        <div class="btn cyan">
+          <span>Avatar</span>
+          <input
+            type="file"
+            name="avatar"
+          >
+        </div>
+        <div class="file-path-wrapper">
+          <input
+            class="file-path validate"
+            type="text"
+          >
+        </div>
+      </div>
+
+      <input
+        type="hidden"
+        name="_csrf"
+        value="{{csrf}}"
+      >
+
+      <button
+        class="position-center btn green"
+        type="submit"
+      >Update Profile</button>
+    </form>
+  </div>
+
+  <div class="col s6">
+    {{#if user.avatar}}
+    <img
+      class="avatar"
+      src="{{user.avatar}}"
+      alt="User Avatar"
+    >
+    {{else}}
+    <p class="position-center alert-font">Avatar Not Found</p>
+    {{/if}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col s6 position-space-between">
+    <a
+      class="btn green"
+      href="/cart"
+    >To My Cart</a>
+    <a
+      class="btn cyan"
+      href="/orders"
+    >To My Orders</a>
+  </div>
+</div>
