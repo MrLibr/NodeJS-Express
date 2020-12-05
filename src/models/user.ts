@@ -3,6 +3,7 @@ import { ModelsConstants } from './../constants/models.constants';
 import { UserStatus } from './../constants/params.constants';
 import { cartSchema, ICart, ICartCourse } from './cart';
 import { ICourse } from './course';
+import { IUser } from './user';
 
 export interface IUser {
   email: string;
@@ -11,7 +12,7 @@ export interface IUser {
   cart: ICart;
   resetToken?: string;
   resetTokenExp?: Date;
-};
+}
 
 export const userSchema: Schema<IUser> = new Schema<IUser>( {
   email: {

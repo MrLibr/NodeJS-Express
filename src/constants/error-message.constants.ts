@@ -24,4 +24,12 @@ export enum ErrorMessages {
   SOMETHING_WAS_WRONG = 'Something Was Wrong. Please Try Again',
   TOKEN_NOT_EXIST = 'This Token Not Exist. Please Try Again',
   HAVE_NOT_PERMISSION = "Sorry, But You Don't Have Required Permissions",
+  CORRECT_EMAIL = 'Please, Write Correct Email',
+  CORRECT_PASSWORD = "Please, Write Correct Password. Length Password Should Be Not Less 6 Symbols, And Don't More 32",
+  CORRECT_NAME = "Please, Write Correct NickName. Length NickName Should Be Not Less 3 Symbols, And Don't More 32",
+  CORRECT_TITLE = 'Please, Write Correct Title. Length Title Should Be Not Less 3 Symbols',
+  CORRECT_PRICE = 'Please, Write Correct Price. Price Should Be Not Less 0 Units',
+  CORRECT_DESCRIPTION = "Please, Write Correct Description. Description Should Be Not Less 100 Symbols, And Don't More 3300",
+  CORRECT_IMG = 'Please, Write Correct Image URL',
+  NOT_EQUAL_FIELDS = 'This Fields Should Be Equal',
 }
