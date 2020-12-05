@@ -8,11 +8,13 @@ import mongoose from 'mongoose';
 import os from 'os';
 import { ConfigConstants } from './constants/config.constants';
 import { NamingConstants } from './constants/naming.constants';
+import { ParamsConstants } from './constants/params.constants';
 import { PathConstants } from './constants/path.constants';
 import { RouterConstants } from './constants/router.constants';
 import authMiddleware from './middleware/auth.middleware';
 import createUserModelMiddleware from './middleware/create-user-model.middleware';
 import errorMiddleware from './middleware/error.middleware';
+import filesMiddleware from './middleware/files.middleware';
 import tokenMiddleware from './middleware/token.middleware';
 import aboutRouters from './routers/about';
 import addCourseRouters from './routers/add';
@@ -49,6 +51,7 @@ app.use( session( {
   saveUninitialized: false,
   store
 } ) );
+app.use( filesMiddleware.single( ParamsConstants.AVATAR ) );
 app.use( csurf() );
 app.use( flash() );
 app.use( authMiddleware );

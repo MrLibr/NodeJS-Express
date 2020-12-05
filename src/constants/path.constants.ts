@@ -15,5 +15,6 @@ export enum PathConstants {
   VIEWS_FOLDER_STANDART = 'views',
   VIEWS_FOLDER_CUSTOM = 'src/views',
   PUBLIC_FOLDER = 'public',
-  AUTH_FOLDER = 'auth/'
+  AUTH_FOLDER = 'auth/',
+  AVATAR_FOLDER = 'avatars'
 }

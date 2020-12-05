@@ -14,6 +14,7 @@ export enum ParamsConstants {
   PROFILE_HEADER = 'Profile | ',
   EMAIL = 'email',
   NAME = 'name',
+  AVATAR = 'avatar',
   PASSWORD = 'password',
   REPEAT_PASSWORD = 'repeatPassword',
   USER_ID = 'userId',
