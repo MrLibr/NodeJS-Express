@@ -9,6 +9,7 @@ export enum PathConstants {
   CART_PAGE = 'cart-page',
   LOGIN_PAGE = 'login-page',
   RESET_PAGE = 'reset-page',
+  ERROR_PAGE = 'error-page',
   RECOVERY_PASSWORD_PAGE = 'recovery-password-page',
   VIEWS_FOLDER_STANDART = 'views',
   VIEWS_FOLDER_CUSTOM = 'src/views',

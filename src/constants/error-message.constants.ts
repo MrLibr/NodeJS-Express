@@ -6,7 +6,6 @@ export enum ErrorTypes {
   UNDEFINED_ERROR = 'undefinedError'
 }
 
-
 export enum ErrorMessages {
   THIS_EMAIL_BUSY = 'This Email Busy, Please Try Any Email',
   THIS_USER_NOT_FOUND = 'This User Not Found. Please, Check Your Email',
@@ -28,5 +27,9 @@ export enum ErrorMessages {
   CORRECT_EMAIL = 'Please, Write Correct Email',
   CORRECT_PASSWORD = "Please, Write Correct Password. Length Password Should Be Not Less 6 Symbols, And Don't More 32",
   CORRECT_NAME = "Please, Write Correct NickName. Length NickName Should Be Not Less 3 Symbols, And Don't More 32",
-  NOT_EQUAL_FIELDS = 'This Fields Should Be Equal'
+  CORRECT_TITLE = 'Please, Write Correct Title. Length Title Should Be Not Less 3 Symbols',
+  CORRECT_PRICE = 'Please, Write Correct Price. Price Should Be Not Less 0 Units',
+  CORRECT_DESCRIPTION = "Please, Write Correct Description. Description Should Be Not Less 100 Symbols, And Don't More 3300",
+  CORRECT_IMG = 'Please, Write Correct Image URL',
+  NOT_EQUAL_FIELDS = 'This Fields Should Be Equal',
 }

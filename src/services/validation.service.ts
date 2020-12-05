@@ -20,6 +20,13 @@ export function passwordValidation() {
     .isAlphanumeric();
 }
 
+export function registerPasswordValidation() {
+  return body( ParamsConstants.REGISTER_PASSWORD, ErrorMessages.CORRECT_PASSWORD )
+    .trim()
+    .isLength( { min: 6, max: 32 } )
+    .isAlphanumeric();
+}
+
 export function equalsFiledValidation( mainField: string, depField: string ) {
   return body( mainField )
     .trim()
@@ -38,18 +45,44 @@ export function nameValidation() {
     .isLength( { min: 3, max: 32 } );
 }
 
-export function catchErrors( req: Request, res: Response, path: RouterConstants | string ) {
-  const errors = validationResult( req );
-
-  return !errors.isEmpty()
-    ? validationNotification( req, res, errors.array()[ 0 ].msg, path )
-    : null;
+export function titleValidation() {
+  return body( ParamsConstants.TITLE, ErrorMessages.CORRECT_TITLE )
+    .trim()
+    .isLength( { min: 3 } );
 }
 
+export function priceValidation() {
+  return body( ParamsConstants.PRICE, ErrorMessages.CORRECT_PRICE )
+    .trim()
+    .isNumeric();
+}
+
+export function descriptionValidation() {
+  return body( ParamsConstants.DESCRIPTION, ErrorMessages.CORRECT_DESCRIPTION )
+    .trim()
+    .isLength( { min: 100, max: 3300 } );
+}
+
+export function urlValidation() {
+  return body( ParamsConstants.IMG, ErrorMessages.CORRECT_IMG )
+    .trim()
+    .isURL();
+}
+
+export function catchErrors( req: Request, res: Response, path: RouterConstants | string ): boolean {
+  const errors = validationResult( req );
+
+  if ( errors.isEmpty() ) {
+    return true;
+  } else {
+    validationNotification( req, res, errors.array()[ 0 ].msg, path );
+    return false;
+  }
+}
 
 export const registerValidation = [
   emailValidation(),
-  passwordValidation(),
+  registerPasswordValidation(),
   equalsFiledValidation( ParamsConstants.REPEAT_PASSWORD, ParamsConstants.PASSWORD ),
   nameValidation()
 ];
@@ -60,5 +93,13 @@ export const loginValidation = [
 ];
 
 export const recoveryValidation = [
+  passwordValidation(),
   equalsFiledValidation( ParamsConstants.REPEAT_PASSWORD, ParamsConstants.PASSWORD ),
+];
+
+export const coursesValidation = [
+  titleValidation(),
+  priceValidation(),
+  descriptionValidation(),
+  urlValidation()
 ];

@@ -3,11 +3,13 @@ import { PathConstants } from '../constants/path.constants';
 import { RouterConstants } from '../constants/router.constants';
 import guardMiddleware from '../middleware/guard-routers.middleware';
 import { notificationNotPermission, notificationSuccessDeleteCourse, notificationSuccessUpdateCourse } from '../services/notification.service';
+import { catchErrors } from '../services/validation.service';
 import { isOwnerOrAdmin } from '../utils/router.helpers';
 import { ErrorTypes } from './../constants/error-message.constants';
 import { NamingConstants } from './../constants/naming.constants';
 import { ParamsConstants } from './../constants/params.constants';
 import Course, { ICourse } from './../models/course';
+import { coursesValidation } from './../services/validation.service';
 
 const router = express.Router();
 
@@ -21,8 +23,8 @@ router.get( RouterConstants.ROOT, async ( req: Request, res: Response ) => {
       title: ParamsConstants.ALL_COURSES_PAGE,
       isAllCourses: true,
       courses,
-      userId: req.user._id.toString() || null,
-      userStatus: req.user.status || null,
+      userId: req.user ? req.user._id : null,
+      userStatus: req.user ? req.user.status : null,
       successOperation: req.flash( ErrorTypes.SUCCESS_OPERATION ),
       undefinedError: req.flash( ErrorTypes.UNDEFINED_ERROR )
     } );
@@ -70,15 +72,19 @@ router.get( RouterConstants.EDIT_BY_ID, guardMiddleware, async ( req: Request, r
   }
 } );
 
-router.post( RouterConstants.EDIT, guardMiddleware, async ( req: Request, res: Response ) => {
+router.post( RouterConstants.EDIT, guardMiddleware, coursesValidation, async ( req: Request, res: Response ) => {
   try {
-    const course = await Course.findById( req.body.id ).lean() as ICourse;
+    const editPagePath: string = RouterConstants.ALL_COURSES + RouterConstants.ROOT + req.body.id + RouterConstants.EDIT + ParamsConstants.PERMISSION_ACCESS;
 
-    if ( isOwnerOrAdmin( req, course ) ) {
-      await Course.findByIdAndUpdate( req.body.id, req.body );
-      notificationSuccessUpdateCourse( req, res );
-    } else {
-      return notificationNotPermission( req, res );
+    if ( catchErrors( req, res, editPagePath ) ) {
+      const course = await Course.findById( req.body.id ).lean() as ICourse;
+
+      if ( isOwnerOrAdmin( req, course ) ) {
+        await Course.findByIdAndUpdate( req.body.id, req.body );
+        notificationSuccessUpdateCourse( req, res );
+      } else {
+        return notificationNotPermission( req, res );
+      }
     }
   } catch ( error ) {
     console.log( error );

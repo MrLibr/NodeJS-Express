@@ -1,9 +1,13 @@
 import { UserStatus } from './../constants/params.constants';
 
 module.exports = {
-  ifEqualUserIdOrUserStatus( userId: string, creatorUserId: string, userStatus: string, options: any ) {
-    const isUserCreator = userId.toString() === creatorUserId.toString();
-    const isRootStatus = userStatus === UserStatus.ADMIN || userStatus === UserStatus.MODERATOR;
+  ifEqualUserIdOrUserStatus( userId: string | null, creatorUserId: string, userStatus: string | null, options: any ) {
+    const isUserCreator = userId
+      ? userId.toString() === creatorUserId.toString()
+      : false;
+    const isRootStatus = userStatus
+      ? userStatus === UserStatus.ADMIN || userStatus === UserStatus.MODERATOR
+      : false;
 
     if ( isUserCreator || isRootStatus ) {
       return options.fn( this );

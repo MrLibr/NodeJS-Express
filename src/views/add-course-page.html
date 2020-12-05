@@ -3,6 +3,7 @@
 <form
   action="/add"
   method="POST"
+  novalidate
 >
   <div class="input-field">
     <input
@@ -11,6 +12,7 @@
       name="title"
       type="text"
       class="validate"
+      value="{{data.title}}"
       required
     >
     <label for="title">Title</label>
@@ -28,6 +30,7 @@
       type="number"
       class="validate"
       min="0"
+      value="{{data.price}}"
       required
     >
     <label for="price">Price</label>
@@ -44,6 +47,7 @@
       name="description"
       type="text"
       class="validate"
+      value="{{data.description}}"
       required
     >
     <label for="price">Description</label>
@@ -60,6 +64,7 @@
       name="img"
       type="url"
       class="validate"
+      value="{{data.img}}"
       required
     >
     <label for="img">URL Image</label>

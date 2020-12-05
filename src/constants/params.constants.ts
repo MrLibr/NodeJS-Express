@@ -7,6 +7,7 @@ export enum ParamsConstants {
   RESET_PAGE = 'Do You Forget Password?',
   RECOVERY_PAGE = 'Change Password',
   ORDERS_HEADER = 'Orders By | ',
+  PAGE_ERROR_HEADER = 'Page Not Found',
   COURSE_HEADER = 'Li:br | ',
   EDIT_COURSE_HEADER = 'Edit | ',
   CART_HEADER = 'Your Cart',
@@ -17,6 +18,12 @@ export enum ParamsConstants {
   USER_ID = 'userId',
   CART_COURSES_ID = 'cart.items.courseId',
   COURSES_ID = 'courses.courseId',
+  TITLE = 'title',
+  PRICE = 'price',
+  DESCRIPTION = 'description',
+  IMG = 'img',
+  REGISTER_PASSWORD = 'rpassword',
+  PERMISSION_ACCESS = '?allow=true'
 }
 
 export enum UserStatus {

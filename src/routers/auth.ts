@@ -27,31 +27,31 @@ router.get( RouterConstants.ROOT, ( req: Request, res: Response ) => {
 
 router.post( RouterConstants.LOGIN, loginValidation, async ( req: Request, res: Response ) => {
   try {
-    catchErrors( req, res, RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
+    if ( catchErrors( req, res, RouterConstants.AUTH + RouterConstants.HAS_LOGIN ) ) {
+      const { email, password } = req.body;
+      const condidate = await User.findOne( { email } );
 
-    const { email, password } = req.body;
-    const condidate = await User.findOne( { email } );
+      if ( condidate ) {
+        const isPasswordSame: boolean = await bcryptjs.compare( password, condidate.password );
 
-    if ( condidate ) {
-      const isPasswordSame: boolean = await bcryptjs.compare( password, condidate.password );
+        if ( isPasswordSame ) {
+          req.session.user = condidate;
+          req.session.isAuth = true;
 
-      if ( isPasswordSame ) {
-        req.session.user = condidate;
-        req.session.isAuth = true;
+          req.session.save( ( error ) => {
+            if ( error ) {
+              throw error;
+            } else {
+              res.redirect( RouterConstants.ROOT );
+            }
+          } );
+        } else {
+          notificationWrongPassword( req, res );
+        }
 
-        req.session.save( ( error ) => {
-          if ( error ) {
-            throw error;
-          } else {
-            res.redirect( RouterConstants.ROOT );
-          }
-        } );
       } else {
-        notificationWrongPassword( req, res );
+        notificationUserNotFound( req, res );
       }
-
-    } else {
-      notificationUserNotFound( req, res );
     }
   } catch ( error ) {
     console.log( error );
@@ -65,20 +65,20 @@ router.get( RouterConstants.LOGOUT, async ( req: Request, res: Response ) => {
 
 router.post( RouterConstants.REGISTER, registerValidation, async ( req: Request, res: Response ) => {
   try {
-    catchErrors( req, res, RouterConstants.AUTH + RouterConstants.HAS_REGISTER );
+    if ( catchErrors( req, res, RouterConstants.AUTH + RouterConstants.HAS_REGISTER ) ) {
+      const { email, name, password } = req.body;
+      const condidate = await User.findOne( { email } );
 
-    const { email, name, password } = req.body;
-    const condidate = await User.findOne( { email } );
+      if ( condidate ) {
+        notificationEmailBusy( req, res );
+      } else {
+        const cryptedPassword: string = await bcryptjs.hash( password, +ConfigConstants.PASSWORD_SECRET_KEY );
+        const newUser = new User( { email, name, password: cryptedPassword, cart: { items: [] } } );
+        await newUser.save();
 
-    if ( condidate ) {
-      notificationEmailBusy( req, res );
-    } else {
-      const cryptedPassword: string = await bcryptjs.hash( password, +ConfigConstants.PASSWORD_SECRET_KEY );
-      const newUser = new User( { email, name, password: cryptedPassword, cart: { items: [] } } );
-      await newUser.save();
-
-      sendSuccessRegisterMail( email );
-      notificationSuccessRegistry( req, res );
+        sendSuccessRegisterMail( email );
+        notificationSuccessRegistry( req, res );
+      }
     }
   } catch ( error ) {
     console.log( error );
@@ -95,30 +95,29 @@ router.get( RouterConstants.RESET, ( req: Request, res: Response ) => {
 
 router.post( RouterConstants.RESET, emailValidation(), async ( req: Request, res: Response ) => {
   try {
+    if ( catchErrors( req, res, RouterConstants.AUTH + RouterConstants.RESET ) ) {
+      const { email } = req.body;
+      const condidate = await User.findOne( { email } );
 
-    catchErrors( req, res, RouterConstants.AUTH + RouterConstants.RESET );
+      if ( condidate ) {
 
-    const { email } = req.body;
-    const condidate = await User.findOne( { email } );
+        crypto.randomBytes( +ConfigConstants.RESET_SIZE_KEY, ( error: Error | null, buffer: Buffer ) => {
+          if ( error ) {
+            notificationSomethingWasWrong( req, res );
+          }
 
-    if ( condidate ) {
+          const token: string = buffer.toString( 'hex' );
 
-      crypto.randomBytes( +ConfigConstants.RESET_SIZE_KEY, ( error: Error | null, buffer: Buffer ) => {
-        if ( error ) {
-          notificationSomethingWasWrong( req, res );
-        }
+          condidate.resetToken = token;
+          condidate.resetTokenExp = Date.now() + 60 * 60 * 1000;
+          condidate.save();
 
-        const token: string = buffer.toString( 'hex' );
-
-        condidate.resetToken = token;
-        condidate.resetTokenExp = Date.now() + 60 * 60 * 1000;
-        condidate.save();
-
-        sendResetPasswordMail( condidate.email, token );
-        notificationSendResetPasswordMail( req, res );
-      } );
-    } else {
-      notificationEmailNotFound( req, res );
+          sendResetPasswordMail( condidate.email, token );
+          notificationSendResetPasswordMail( req, res );
+        } );
+      } else {
+        notificationEmailNotFound( req, res );
+      }
     }
   } catch ( error ) {
     console.log( error );
@@ -156,23 +155,25 @@ router.get( RouterConstants.RECOVERY + RouterConstants.BY_ID, async ( req: Reque
 
 router.post( RouterConstants.RECOVERY, recoveryValidation, async ( req: Request, res: Response ) => {
   try {
-    catchErrors( req, res, RouterConstants.AUTH + RouterConstants.RECOVERY );
+    const recoveryPagePath: string = RouterConstants.AUTH + RouterConstants.RECOVERY + RouterConstants.ROOT + req.body.token;
 
-    const { password, userId, token } = req.body;
-    const currentUser = await User.findOne( {
-      _id: userId,
-      resetToken: token,
-      resetTokenExp: { $gt: Date.now() }
-    } );
+    if ( catchErrors( req, res, recoveryPagePath ) ) {
+      const { password, userId, token } = req.body;
+      const currentUser = await User.findOne( {
+        _id: userId,
+        resetToken: token,
+        resetTokenExp: { $gt: Date.now() }
+      } );
 
-    if ( currentUser ) {
-      currentUser.password = await bcryptjs.hash( password, +ConfigConstants.PASSWORD_SECRET_KEY );
-      currentUser.resetToken = undefined;
-      currentUser.resetTokenExp = undefined;
-      await currentUser.save();
-      notificationSuccessChangePassword( req, res );
-    } else {
-      return notificationUserNotFound( req, res );
+      if ( currentUser ) {
+        currentUser.password = await bcryptjs.hash( password, +ConfigConstants.PASSWORD_SECRET_KEY );
+        currentUser.resetToken = undefined;
+        currentUser.resetTokenExp = undefined;
+        await currentUser.save();
+        notificationSuccessChangePassword( req, res );
+      } else {
+        return notificationUserNotFound( req, res );
+      }
     }
   } catch ( error ) {
     console.log( error );

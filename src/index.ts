@@ -12,6 +12,7 @@ import { PathConstants } from './constants/path.constants';
 import { RouterConstants } from './constants/router.constants';
 import authMiddleware from './middleware/auth.middleware';
 import createUserModelMiddleware from './middleware/create-user-model.middleware';
+import errorMiddleware from './middleware/error.middleware';
 import tokenMiddleware from './middleware/token.middleware';
 import aboutRouters from './routers/about';
 import addCourseRouters from './routers/add';
@@ -60,6 +61,7 @@ app.use( RouterConstants.ADD, addCourseRouters );
 app.use( RouterConstants.ABOUT, aboutRouters );
 app.use( RouterConstants.ORDERS, ordersRouters );
 app.use( RouterConstants.CART, cardRouters );
+app.use( errorMiddleware );
 
 serverStart();
 
