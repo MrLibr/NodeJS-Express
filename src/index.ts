@@ -1,9 +1,11 @@
+import compression from 'compression';
 import flash from 'connect-flash';
 import connectMongoSession from 'connect-mongodb-session';
 import csurf from 'csurf';
 import express from 'express';
 import expressHandlebars from 'express-handlebars';
 import session from 'express-session';
+import helmet from 'helmet';
 import mongoose from 'mongoose';
 import os from 'os';
 import { ConfigConstants } from './constants/config.constants';
@@ -54,6 +56,8 @@ app.use( session( {
   store
 } ) );
 app.use( filesMiddleware.single( ParamsConstants.AVATAR ) );
+app.use( helmet( { contentSecurityPolicy: false } ) );
+app.use( compression() );
 app.use( csurf() );
 app.use( flash() );
 app.use( authMiddleware );
