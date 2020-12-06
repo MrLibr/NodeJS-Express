@@ -7,7 +7,7 @@ const storage = multer.diskStorage( {
     callback( null, PathConstants.AVATAR_FOLDER );
   },
   filename( req: Request, file: Express.Multer.File, callback: any ) {
-    callback( null, file.originalname + Date.now() );
+    callback( null, Date.now() + file.originalname );
   }
 } );
 

@@ -10,6 +10,7 @@ export interface IUser {
   name: string;
   password: string;
   cart: ICart;
+  avatarUrl?: string;
   resetToken?: string;
   resetTokenExp?: Date;
 }
@@ -32,12 +33,9 @@ export const userSchema: Schema<IUser> = new Schema<IUser>( {
     default: UserStatus.GUEST
   },
   cart: cartSchema,
-  resetToken: {
-    type: String
-  },
-  resetTokenExp: {
-    type: Date
-  }
+  avatarUrl: String,
+  resetToken: String,
+  resetTokenExp: Date,
 } );
 
 userSchema.methods.addToCart = function ( course: ICourse ): Promise<void> {

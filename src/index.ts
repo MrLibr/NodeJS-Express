@@ -44,6 +44,8 @@ app.set( NamingConstants.VIEW_ENGINE, NamingConstants.HANDLEBARS );
 app.set( PathConstants.VIEWS_FOLDER_STANDART, PathConstants.VIEWS_FOLDER_CUSTOM );
 
 app.use( express.static( PathConstants.PUBLIC_FOLDER ) );
+app.use( express.static( PathConstants.AVATAR_FOLDER ) );
+
 app.use( express.urlencoded( { extended: true } ) );
 app.use( session( {
   secret: ConfigConstants.SESSION_SECRET_KEY,

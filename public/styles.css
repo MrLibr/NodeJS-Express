@@ -144,11 +144,20 @@
   color: red;
 }
 
+.avatar-container {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
 .avatar {
-  max-width: 250px;
+  max-width: 350px;
   height: auto;
 
   border: none;
-  border-radius: 25%;
+  border-radius: 15px;
   box-shadow: 3px -2px 5px darkslategrey;
 }

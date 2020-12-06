@@ -6,6 +6,7 @@
     <form
       action="/profile"
       method="POST"
+      enctype="multipart/form-data"
     >
 
       <div class="input-field">
@@ -79,12 +80,12 @@
     </form>
   </div>
 
-  <div class="col s6">
-    {{#if user.avatar}}
+  <div class="col s6 avatar-container">
+    {{#if user.avatarUrl}}
     <img
       class="avatar"
-      src="{{user.avatar}}"
-      alt="User Avatar"
+      src="{{user.avatarUrl}}"
+      alt="User Avatar - {{user.name}}"
     >
     {{else}}
     <p class="position-center alert-font">Avatar Not Found</p>
