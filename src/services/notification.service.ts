@@ -111,3 +111,8 @@ export function notificationSuccessChangePassword( req: Request, res: Response )
   successNotification( req, ErrorMessages.SUCCESS_CHANGE_PASSWORD );
   redirectTo( res, RouterConstants.AUTH + RouterConstants.HAS_LOGIN );
 }
+
+export function notificationSuccessUpdateUserInfo( req: Request, res: Response ): void {
+  successNotification( req, ErrorMessages.SUCCESS_UPDATE_USER_DATA );
+  redirectTo( res, RouterConstants.PROFILE );
+}

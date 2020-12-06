@@ -47,6 +47,12 @@
       <li><a href="/cart">Cart Page</a></li>
       {{/if}}
 
+      {{#if isProfile}}
+      <li class="active"><a href="/profile">Profile Page</a></li>
+      {{else}}
+      <li><a href="/profile">Profile Page</a></li>
+      {{/if}}
+
       <li><a href="/auth/logout">LogOut</a></li>
       {{else}}
 

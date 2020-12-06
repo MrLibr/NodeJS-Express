@@ -13,6 +13,7 @@ export enum RouterConstants {
   REGISTER = '/register',
   RESET = '/reset',
   RECOVERY = '/recovery',
+  PROFILE = '/profile',
   BY_ID = '/:id',
   EDIT_BY_ID = '/:id/edit',
   HAS_LOGIN = '#login',

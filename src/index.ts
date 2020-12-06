@@ -8,11 +8,13 @@ import mongoose from 'mongoose';
 import os from 'os';
 import { ConfigConstants } from './constants/config.constants';
 import { NamingConstants } from './constants/naming.constants';
+import { ParamsConstants } from './constants/params.constants';
 import { PathConstants } from './constants/path.constants';
 import { RouterConstants } from './constants/router.constants';
 import authMiddleware from './middleware/auth.middleware';
 import createUserModelMiddleware from './middleware/create-user-model.middleware';
 import errorMiddleware from './middleware/error.middleware';
+import filesMiddleware from './middleware/files.middleware';
 import tokenMiddleware from './middleware/token.middleware';
 import aboutRouters from './routers/about';
 import addCourseRouters from './routers/add';
@@ -21,6 +23,7 @@ import cardRouters from './routers/cart';
 import allCoursesRouters from './routers/courses';
 import homeRouters from './routers/home';
 import ordersRouters from './routers/orders';
+import profileRouters from './routers/profile';
 
 
 const app = express();
@@ -41,6 +44,8 @@ app.set( NamingConstants.VIEW_ENGINE, NamingConstants.HANDLEBARS );
 app.set( PathConstants.VIEWS_FOLDER_STANDART, PathConstants.VIEWS_FOLDER_CUSTOM );
 
 app.use( express.static( PathConstants.PUBLIC_FOLDER ) );
+app.use( express.static( PathConstants.AVATAR_FOLDER ) );
+
 app.use( express.urlencoded( { extended: true } ) );
 app.use( session( {
   secret: ConfigConstants.SESSION_SECRET_KEY,
@@ -48,6 +53,7 @@ app.use( session( {
   saveUninitialized: false,
   store
 } ) );
+app.use( filesMiddleware.single( ParamsConstants.AVATAR ) );
 app.use( csurf() );
 app.use( flash() );
 app.use( authMiddleware );
@@ -61,6 +67,7 @@ app.use( RouterConstants.ADD, addCourseRouters );
 app.use( RouterConstants.ABOUT, aboutRouters );
 app.use( RouterConstants.ORDERS, ordersRouters );
 app.use( RouterConstants.CART, cardRouters );
+app.use( RouterConstants.PROFILE, profileRouters );
 app.use( errorMiddleware );
 
 serverStart();
