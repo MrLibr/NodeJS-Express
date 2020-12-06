@@ -56,10 +56,10 @@ app.use( session( {
   store
 } ) );
 app.use( filesMiddleware.single( ParamsConstants.AVATAR ) );
+app.use( helmet( { contentSecurityPolicy: false } ) );
+app.use( compression() );
 app.use( csurf() );
 app.use( flash() );
-app.use( helmet() );
-app.use( compression() );
 app.use( authMiddleware );
 app.use( tokenMiddleware );
 app.use( createUserModelMiddleware );
